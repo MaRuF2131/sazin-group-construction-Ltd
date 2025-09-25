@@ -47,7 +47,7 @@ export default function Card() {
               />
               {/* Overlay Button with Icon */}
               <Link
-                href={`/projects/${project.id}`}
+                href={`/Product-Base-Services/Successful-Project/projects/${project.id}`}
                 className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition"
               >
                 <FaLink className="text-white text-3xl bg-red-600 p-2 rounded-full shadow-md hover:bg-red-700 transition" />
