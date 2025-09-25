@@ -60,9 +60,10 @@ const Banner = () => {
   const parallax = (distance) => scrollY * distance;
 
   useEffect(() => {
+    const wait=current===0?11000:5000;
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
-    }, 11000);
+    }, wait);
     return () => clearInterval(interval);
   }, []);
 
