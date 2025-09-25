@@ -121,8 +121,7 @@ export default function Contact() {
               <p>
                 <strong>Email</strong>
                 <br />
-                sazin.ltd@gmail.com <br />
-                info@sazin.com.bd
+                sazin.engineering@gmail.com
               </p>
             </div>
 

@@ -106,7 +106,7 @@ if (pathname.startsWith('/Product-Base-Services/Agro&Fisheries')) {
                 { icon: <FaWhatsapp />, link: "#" },
                 { icon: <FaFacebookF />, link: "#" },
                 { icon: <FaTwitter />, link: "#" },
-                { icon: <FaGoogle />, link: "mailto:sazin.engineering@gmail.com" },
+                { icon: <FaGoogle />, link: "sazin.engineering@gmail.com" },
                 { icon: <FaLinkedinIn />, link: "#" },
                 { icon: <FaPinterestP />, link: "#" },
                 { icon: <FaYoutube />, link: "#" },
