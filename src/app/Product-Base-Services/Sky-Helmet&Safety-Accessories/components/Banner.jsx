@@ -49,8 +49,8 @@ const Banner = () => {
   };
 
   const h3Text = useTypingEffect('Welcome to Our Safety World', 80);
-  const h1Text = useTypingEffect('Sky Helmet & Safety Accessories', 50);
-  const pText = useTypingEffect('Safety First & Get Safety', 30);
+  const h1Text = useTypingEffect('Revvo Helmet & Safety Accessories', 50);
+  const pText = useTypingEffect('Revvo First & Get Safety', 30);
 
   const handleDragEnd = (event, info) => {
     if (info.offset.x < -50) {

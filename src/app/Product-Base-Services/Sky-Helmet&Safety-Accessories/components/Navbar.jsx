@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 const option = [
   {
-    name: "Sky Helmet",
+    name: "Revvo Helmet",
     link: "/Product-Base-Services/Sky-Helmet&Safety-Accessories/Sky-Helmet",
     submenu: [
       { name: "Full Face", link: "/Product-Base-Services/Sky-Helmet&Safety-Accessories/Sky-Helmet/Full-Face" },

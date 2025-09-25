@@ -8,7 +8,7 @@ import { FaChevronDown } from 'react-icons/fa';
 
 const slides = [
   {
-    src: '/agency-banner-video.mp4',
+    src: '/sazin.mp4',
     alt: 'Modern construction project banner 1',
     title: 'We Build Great Solutions',
     subtitle: 'Welcome to Our Company',

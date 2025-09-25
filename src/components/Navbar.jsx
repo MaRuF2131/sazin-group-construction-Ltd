@@ -1,11 +1,11 @@
-'use client';
-import Logo from '@/Logo';
-import Theme from '@/utils/Theme';
-import { AnimatePresence, motion } from 'framer-motion';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { FaArrowUp, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+"use client";
+import Logo from "@/Logo";
+import Theme from "@/utils/Theme";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { FaArrowUp, FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 export default function Navbar() {
   const [dropdown, setDropdown] = useState({
@@ -29,68 +29,68 @@ export default function Navbar() {
   const menuData = {
     about: [
       {
-        name: 'Detailed Company History',
-        href: '/about/history',
+        name: "Detailed Company History",
+        href: "/about/history",
         prefetch: true,
       },
-      { name: 'Mission & Vision', href: '/about/mission', prefetch: true },
+      { name: "Mission & Vision", href: "/about/mission", prefetch: true },
       {
-        name: 'Leadership Profiles',
-        href: '/about/leadership',
+        name: "Leadership Profiles",
+        href: "/about/leadership",
         prefetch: false,
       },
       {
-        name: 'Overview of Business Sectors',
-        href: '/about/sectors',
+        name: "Overview of Business Sectors",
+        href: "/about/sectors",
         prefetch: false,
       },
     ],
-    sazin_dropdown:[
+    sazin_dropdown: [
       {
-        name: 'Electro-Mechanical Construction',
-        href: '/Services/Electro-mechanical',
+        name: "Electro-Mechanical Construction",
+        href: "/Services/Electro-mechanical",
         prefetch: true,
       },
       {
-        name: 'Civil Construction',
-        href: '/Services/Civil-construction',
+        name: "Civil Construction",
+        href: "/Services/Civil-construction",
         prefetch: true,
       },
       {
-        name: 'Engineering Procurement & Construction',
-        href: '/Services/engineering-procurement-construction',
+        name: "Engineering Procurement & Construction",
+        href: "/Services/engineering-procurement-construction",
         prefetch: false,
       },
       {
-        name: 'Safety & Security Construction and Management',
-        href: '/Services/safety-security-construction-management',
+        name: "Safety & Security Construction and Management",
+        href: "/Services/safety-security-construction-management",
         prefetch: false,
       },
       {
-        name: 'Populer Project',
-        href: '/Product-Base-Services/Successful-Project',
+        name: "Populer Project",
+        href: "/Product-Base-Services/Successful-Project",
         prefetch: false,
       },
     ],
     business: [
       {
-        name: 'Sazin Agro & Fisheries',
-        href: '/Product-Base-Services/Agro&Fisheries',
+        name: "Sazin Agro & Fisheries",
+        href: "/Product-Base-Services/Agro&Fisheries",
         prefetch: false,
       },
       {
-        name: 'Sky Helmet & Safety Accessories',
-        href: '/Product-Base-Services/Sky-Helmet&Safety-Accessories',
+        name: "Sky Helmet & Safety Accessories",
+        href: "/Product-Base-Services/Sky-Helmet&Safety-Accessories",
         prefetch: false,
       },
     ],
     more: [
-      { name: 'Projects', href: '/Projects', prefetch: true },
-      { name: 'Gallery', href: '/project-gallery', prefetch: true },
-      { name: 'Contact', href: '/contact', prefetch: true },
-      { name: 'Career', href: '/career', prefetch: false },
-      { name: 'News/Blog', href: '/news-blog', prefetch: false },
-      { name: 'Sustainability', href: '/sustainability', prefetch: false },
+      // { name: 'Projects', href: '/Projects', prefetch: true },
+      { name: "Gallery", href: "/project-gallery", prefetch: true },
+      { name: "Contact", href: "/contact", prefetch: true },
+      { name: "Career", href: "/career", prefetch: false },
+      { name: "News/Blog", href: "/news-blog", prefetch: false },
+      { name: "Sustainability", href: "/sustainability", prefetch: false },
     ],
   };
 
@@ -105,54 +105,52 @@ export default function Navbar() {
         setDropdown({ about: false, business: false });
       }
     };
-    document.addEventListener('pointerdown', handleClickOutside);
+    document.addEventListener("pointerdown", handleClickOutside);
 
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setIsScrolled(scrollY > 20);
       setShowTopBtn(scrollY > 300);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      document.removeEventListener('pointerdown', handleClickOutside);
-      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener("pointerdown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [dropdown]);
 
   // 🔹 Scroll to Top
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-
-
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   const [theme, setTheme] = useState([]);
-  useEffect(()=>{
-    if(pathname.startsWith('/Product-Base-Services/Agro&Fisheries')){
+  useEffect(() => {
+    if (pathname.startsWith("/Product-Base-Services/Agro&Fisheries")) {
       setTheme([
         {
-          underline:"bg-green-800",
-          hover:"hover:text-[#6cb12c]",
-          themeText:'text-[#6cb12c]',
-        }])
+          underline: "bg-green-800",
+          hover: "hover:text-[#6cb12c]",
+          themeText: "text-[#6cb12c]",
+        },
+      ]);
+    } else if (pathname.startsWith("/")) {
+      setTheme([
+        {
+          underline: "bg-red-500",
+          hover: "hover:text-red-600",
+          themeText: "text-red-600",
+        },
+      ]);
     }
-     else if(pathname.startsWith('/')){
-       setTheme([{
-        underline:"bg-red-500",
-        hover:"hover:text-red-600",
-        themeText:'text-red-600',
+  }, [pathname]);
 
-       }])
-     }
-
-  },[pathname])
-
-    // 🔹 Active Border
+  // 🔹 Active Border
   const ActiveBorder = () => (
     <motion.span
       className={`absolute bottom-0 left-0 h-[1.8px]  ${theme[0]?.underline}`}
       initial={{ width: 0 }}
-      animate={{ width: '100%' }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      animate={{ width: "100%" }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     />
   );
 
@@ -160,18 +158,14 @@ export default function Navbar() {
     <>
       <motion.nav
         className={`bg-white/90 dark:bg-black/70 backdrop-blur-lg sticky top-0 z-[9999] transition-all duration-300 ${
-          isScrolled ? 'shadow-lg py-2' : 'py-2'
+          isScrolled ? "shadow-lg py-2" : "py-2"
         }`}
       >
         <div className="w-full max-w-[100rem] mx-auto px-4 flex justify-between items-center">
           {/* Logo */}
-          <Link
-            href="/"
-            prefetch
-            className=" font-bold w-35 h-fit "
-          >
+          <Link href="/" prefetch className=" font-bold w-35 h-fit ">
             {/* Company<span className="text-red-600">Logo</span> */}
-            <Logo  />
+            <Logo />
           </Link>
 
           {/* Desktop Menu */}
@@ -185,24 +179,28 @@ export default function Navbar() {
               >
                 Home
               </Link>
-              {pathname === '/' && <ActiveBorder />}
+              {pathname === "/" && <ActiveBorder />}
             </li>
 
             {/* Dropdowns */}
-            {['about', 'business'].map((key) => (
+            {["about", "business"].map((key) => (
               <li
                 key={key}
                 className="relative"
-                ref={key === 'about' ? aboutRef : businessRef}
+                ref={key === "about" ? aboutRef : businessRef}
               >
-                <button className={`relative cursor-pointer flex items-center gap-1 text-gray-700 dark:text-gray-200  transition-colors ${theme[0]?.hover}`}>
-                  {key === 'about' ? 'About Us' : 'Business/Products'}{' '}
+                <button
+                  className={`relative cursor-pointer flex items-center gap-1 text-gray-700 dark:text-gray-200  transition-colors ${theme[0]?.hover}`}
+                >
+                  {key === "about" ? "About Us" : "Business/Products"}{" "}
                   {dropdown[key] ? (
                     <FaChevronUp className="w-4 h-4" />
                   ) : (
                     <FaChevronDown className="w-4 h-4" />
                   )}
-                  {menuData[key].some((item)=>pathname.startsWith(item.href)) && <ActiveBorder />}
+                  {menuData[key].some((item) =>
+                    pathname.startsWith(item.href)
+                  ) && <ActiveBorder />}
                 </button>
                 <AnimatePresence>
                   {dropdown[key] && (
@@ -213,42 +211,52 @@ export default function Navbar() {
                       transition={{ duration: 0.2 }}
                       className="absolute top-full left-0 bg-white/90 dark:bg-gray-800 shadow-lg mt-2 w-72 rounded-md p-2 space-y-2 z-50"
                     >
-                      {key==='business'&&
-                            <ul 
-
-                              onPointerLeave={(e)=>{e.stopPropagation() ;setSazinDropdown(false)}}
-                              onPointerEnter={(e)=>{e.stopPropagation() ;setSazinDropdown(true)}}
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.2 }}
-                                className=" bg-transparent  w-full rounded-md  space-y-2 z-50"
-                            >
-                              <button
-                               className={`relative w-full  cursor-pointer flex items-center justify-between gap-1 text-gray-700 dark:text-gray-200  transition-colors ${theme[0]?.hover}`}>
-                                Sazin Construction Ltd
-                              {sazinDropdown ? (
-                                <FaChevronUp className="w-4 h-4" />
-                              ) : (
-                                <FaChevronDown className="w-4 h-4" />
-                              )}
-                              {menuData?.sazin_dropdown.some((item)=>pathname.startsWith(item.href)) && <ActiveBorder />}
-                            </button>
-                            {sazinDropdown &&
-                                menuData?.sazin_dropdown.map((link, idx) => (
-                                  <li key={idx} className="relative pl-2">
-                                    <Link
-                                      href={link.href}
-                                      prefetch={link.prefetch}
-                                      className={`block text-sm text-gray-800 dark:text-gray-200  relative transition-colors ${theme[0]?.hover}`}
-                                    >
-                                    {link.name}
-                                    {pathname.startsWith(link.href) && <ActiveBorder />}
-                                    </Link>
-                                  </li>
-                                ))}                   
-                      </ul>          
-                      }
+                      {key === "business" && (
+                        <ul
+                          onPointerLeave={(e) => {
+                            e.stopPropagation();
+                            setSazinDropdown(false);
+                          }}
+                          onPointerEnter={(e) => {
+                            e.stopPropagation();
+                            setSazinDropdown(true);
+                          }}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className=" bg-transparent  w-full rounded-md  space-y-2 z-50"
+                        >
+                          <button
+                            className={`relative w-full  cursor-pointer flex items-center justify-between gap-1 text-gray-700 dark:text-gray-200  transition-colors ${theme[0]?.hover}`}
+                          >
+                            Sazin Construction Ltd
+                            {sazinDropdown ? (
+                              <FaChevronUp className="w-4 h-4" />
+                            ) : (
+                              <FaChevronDown className="w-4 h-4" />
+                            )}
+                            {menuData?.sazin_dropdown.some((item) =>
+                              pathname.startsWith(item.href)
+                            ) && <ActiveBorder />}
+                          </button>
+                          {sazinDropdown &&
+                            menuData?.sazin_dropdown.map((link, idx) => (
+                              <li key={idx} className="relative pl-2">
+                                <Link
+                                  href={link.href}
+                                  prefetch={link.prefetch}
+                                  className={`block text-sm text-gray-800 dark:text-gray-200  relative transition-colors ${theme[0]?.hover}`}
+                                >
+                                  {link.name}
+                                  {pathname.startsWith(link.href) && (
+                                    <ActiveBorder />
+                                  )}
+                                </Link>
+                              </li>
+                            ))}
+                        </ul>
+                      )}
                       {menuData[key].map((link, idx) => (
                         <li key={idx} className="relative">
                           <Link
@@ -267,14 +275,30 @@ export default function Navbar() {
               </li>
             ))}
 
+            {/* Projects */}
+            <li className="relative">
+              <Link
+                href="/Projects"
+                prefetch={true}
+                className={`text-gray-700 dark:text-gray-200 relative transition-colors ${theme[0]?.hover}`}
+              >
+                Projects
+              </Link>
+              {pathname.startsWith("/Projects") && <ActiveBorder />}
+            </li>
+
             {/* More */}
             <li className="relative group py-2">
-              <button className={`relative flex items-center gap-1 text-gray-800 dark:text-gray-200  transition-colors ${theme[0]?.hover}`}>
-                More Details{' '}
+              <button
+                className={`relative flex items-center gap-1 text-gray-800 dark:text-gray-200  transition-colors ${theme[0]?.hover}`}
+              >
+                More Details{" "}
                 <span className="transition-transform duration-300 group-hover:rotate-180">
                   ↓
                 </span>
-                {menuData.more.some((item)=>pathname.startsWith(item.href)) && <ActiveBorder />}
+                {menuData.more.some((item) =>
+                  pathname.startsWith(item.href)
+                ) && <ActiveBorder />}
               </button>
               <ul className="absolute hidden group-hover:block top-full right-0 bg-white/90 dark:bg-gray-800 shadow-lg w-40 rounded-xl p-2 space-y-1 z-50">
                 {menuData.more.map((item, idx) => (
@@ -300,7 +324,7 @@ export default function Navbar() {
 
           {/* Mobile Button */}
           <div className="lg:hidden flex items-center gap-2 ">
-            <Theme theme={theme}/>
+            <Theme theme={theme} />
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="text-gray-800 dark:text-gray-200"
@@ -317,8 +341,8 @@ export default function Navbar() {
                   strokeWidth={2}
                   d={
                     mobileOpen
-                      ? 'M6 18L18 6M6 6l12 12'
-                      : 'M4 6h16M4 12h16M4 18h16'
+                      ? "M6 18L18 6M6 6l12 12"
+                      : "M4 6h16M4 12h16M4 18h16"
                   }
                 />
               </svg>
@@ -331,10 +355,10 @@ export default function Navbar() {
           {mobileOpen && (
             <motion.div
               className="myDiv fixed lg:hidden top-20 left-0 h-[calc(100vh-80px)] dark:bg-black bg-white z-[9999] w-3/4 max-w-xs shadow-lg p-6 overflow-y-auto"
-              initial={{ x: '-100%' }}
+              initial={{ x: "-100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'tween', duration: 0.3 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "tween", duration: 0.3 }}
             >
               <ul className="flex flex-col space-y-4">
                 {/* Static Home */}
@@ -346,12 +370,12 @@ export default function Navbar() {
                     onClick={() => setMobileOpen(false)}
                   >
                     Home
-                    {pathname === '/' && <ActiveBorder />}
+                    {pathname === "/" && <ActiveBorder />}
                   </Link>
                 </li>
 
                 {/* Mobile Dropdowns */}
-                {['about', 'business', 'more'].map((key) => (
+                {["about", "business", "more"].map((key) => (
                   <li key={key} className="relative">
                     <button
                       onClick={() =>
@@ -362,17 +386,19 @@ export default function Navbar() {
                       }
                       className={`flex justify-between w-full text-gray-700 dark:text-gray-200  relative transition-colors ${theme[0]?.hover}`}
                     >
-                      {key === 'about'
-                        ? 'About Us'
-                        : key === 'business'
-                        ? 'Business/Products'
-                        : 'More Details'}
+                      {key === "about"
+                        ? "About Us"
+                        : key === "business"
+                        ? "Business/Products"
+                        : "More Details"}
                       {mobileDropdown[key] ? (
                         <FaChevronUp />
                       ) : (
                         <FaChevronDown />
                       )}
-                      {menuData[key].some((item)=>pathname.startsWith(item.href)) && <ActiveBorder />}
+                      {menuData[key].some((item) =>
+                        pathname.startsWith(item.href)
+                      ) && <ActiveBorder />}
                     </button>
                     {mobileDropdown[key] && (
                       <ul className="pl-4 mt-2 space-y-2 relative">
@@ -395,6 +421,19 @@ export default function Navbar() {
                     )}
                   </li>
                 ))}
+
+                {/* Projects */}
+                <li className="relative">
+                  <Link
+                    href="/Projects"
+                    prefetch={true}
+                    className={`block text-gray-700 dark:text-gray-200 relative transition-colors ${theme[0]?.hover}`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Projects
+                    {pathname.startsWith("/Projects") && <ActiveBorder />}
+                  </Link>
+                </li>
               </ul>
             </motion.div>
           )}
