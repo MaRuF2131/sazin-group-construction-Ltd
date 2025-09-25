@@ -1,6 +1,10 @@
 import { projects } from "../../projects";
 
-
+export async function generateStaticParams() {
+  return projects.map((p) => ({
+    id: p.id.toString(), // must be a string for Next.js
+  }));
+}
 
 export default function ProjectDetails({ params }) {
   const project = projects.find((p) => p.id === Number(params.id));
