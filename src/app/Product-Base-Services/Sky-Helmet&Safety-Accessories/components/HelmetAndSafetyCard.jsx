@@ -37,11 +37,6 @@ const HelmetAndSafetyCard = ({ data }) => {
                     {item?.subtitle}
                   </p>
 
-                  {/* Price */}
-                  <p className="text-lg font-semibold text-red-600 dark:text-red-400 mb-3">
-                    {item?.price}৳
-                  </p>
-
                   {/* Extra Description */}
                   <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
                     {item?.description}
