@@ -6,7 +6,7 @@ const nextConfig = {
 /*   output: 'standalone', // Vercel optimized deploy */
   output: 'export', 
   images: {
-    domains: ["images.unsplash.com", "yourdomain.com","https://i.postimg.cc"], // trusted sources,
+    domains: ["images.unsplash.com", "sazin.com.bd","https://i.postimg.cc"], // trusted sources,
     /* formats: ["image/avif", "image/webp",'image/jpg'], */ // modern formats for optimization,
     minimumCacheTTL: 60*60*24*30, // seconds, for stale images,
     unoptimized: true
