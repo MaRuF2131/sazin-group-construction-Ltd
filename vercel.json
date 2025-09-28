@@ -10,12 +10,6 @@
       ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "destination": "https://www.sazin.com.bd/$1",
-      "permanent": true
-    }
-  ]
+ 
 }
 
