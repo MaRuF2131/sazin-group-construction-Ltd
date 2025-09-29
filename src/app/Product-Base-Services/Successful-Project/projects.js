@@ -41,7 +41,7 @@ export const projects = [
     title: "Public Work Department, Khulna",
     date: "March 4, 2021",
     category: "PWD",
-    img: "/pwd.jpg",
+    img: "/pwd-0.jpg",
     description:
       "Civil construction and repair projects executed under PWD Khulna with focus on sustainability and efficiency.",
   },

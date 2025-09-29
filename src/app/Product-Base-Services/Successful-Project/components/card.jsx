@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { categories, projects } from "../projects";
 import { FaLink } from "react-icons/fa";
+import Image from "next/image";
 
 export default function Card() {
   const [filter, setFilter] = useState("All Projects");
@@ -40,9 +41,11 @@ export default function Card() {
           >
             {/* Image + Overlay */}
             <div className="relative w-full h-44 flex items-center justify-center overflow-hidden mb-4 group">
-              <img
+              <Image
                 src={project.img}
                 alt={project.title}
+                width={300}
+                height={200}
                 className="max-h-full object-contain transform transition-transform duration-300 group-hover:scale-105"
               />
               {/* Overlay Button with Icon */}

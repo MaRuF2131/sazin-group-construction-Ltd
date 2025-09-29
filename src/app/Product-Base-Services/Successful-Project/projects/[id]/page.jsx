@@ -1,4 +1,5 @@
 import { projects } from "../../projects";
+import Image from "next/image"; 
 
 export async function generateStaticParams() {
   return projects.map((p) => ({
@@ -7,7 +8,7 @@ export async function generateStaticParams() {
 }
 
 export default function ProjectDetails({ params }) {
-  const project = projects.find((p) => p.id === Number(params.id));
+  const project = projects.find((p) => p?.id === parseInt(params?.id));
 
   if (!project) {
     return <div className="p-10 text-center text-red-600">Project not found</div>;
@@ -18,10 +19,12 @@ export default function ProjectDetails({ params }) {
       <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Image */}
         <div className="flex items-center justify-center">
-          <img
+          <Image
             src={project.img}
             alt={project.title}
             className="rounded-lg shadow-md max-h-[400px] object-contain"
+            width={300}
+            height={200}
           />
         </div>
 

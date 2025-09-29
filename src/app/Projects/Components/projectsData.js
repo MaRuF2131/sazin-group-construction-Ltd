@@ -14,7 +14,7 @@ export const projects = [
 
   { id: 13, category: "PWD", title: "Public Work Department, Pabna", sub_title: "Development and improvement of government facilities in Pabna under the Public Works Department.", date: "2025-01-10", img: "/pwd-5.jpg" },
   { id: 14, category: "PGCB", title: "Power Grid Company of Bangladesh", sub_title: "Electrical development work completed for Power Grid Company of Bangladesh to enhance energy distribution capacity.", date: "March 4, 2021", img: "/four.jpg" },
-  { id: 15, category: "PWD", title: "Public Work Department, Khulna", sub_title: "Civil construction and repair projects executed under PWD Khulna with focus on sustainability and efficiency.", date: "March 4, 2021", img: "//pwd.jpg" },
+  { id: 15, category: "PWD", title: "Public Work Department, Khulna", sub_title: "Civil construction and repair projects executed under PWD Khulna with focus on sustainability and efficiency.", date: "March 4, 2021", img: "/pwd-0.jpg" },
   { id: 16, category: "NHA", title: "Fire Protection System", sub_title: "Installation of modern fire protection system to strengthen safety measures for residential and commercial buildings under NHA.", date: "March 4, 2021", img: "/three.png" },
   { id: 17, category: "PGCB", title: "Complete Various Work Of Power Grid Company Ltd.", sub_title: "Complete Various Work Of Power Grid Company Ltd.", date: "March 4, 2021", img: "/PGCB.jpg" },
   { id: 18, category: "NHA", title: "Solar Systems Work", sub_title: "Installation of solar energy systems to ensure sustainable power solutions for residential housing projects.", date: "March 4, 2021", img: "/NHA-1.jpg" },
