@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 
 export default function Agriculture({ data }) {
   return (
@@ -28,21 +29,27 @@ export default function Agriculture({ data }) {
         </div>
 
         <div className="space-y-3">
-          <img
+          <Image
             src={data.gallery[3]}
             alt="Fisheries"
             className="w-full rounded-xl shadow-md object-cover h-56 sm:h-72"
+            width={300}
+            height={200}
           />
           <div className="grid grid-cols-2 gap-3">
-            <img
+            <Image
               src={data.gallery[5]}
               alt="pond"
               className="rounded-lg object-cover h-28 w-full"
+              width={300}
+              height={200}
             />
-            <img
+            <Image
               src={data.gallery[6]}
               alt="feeding"
               className="rounded-lg object-cover h-28 w-full"
+              width={300}
+              height={200}
             />
           </div>
         </div>

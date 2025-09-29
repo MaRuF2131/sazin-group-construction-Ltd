@@ -71,8 +71,6 @@ export default function FeatureProducts() {
                     fill
                     className="object-cover"
                     loading="lazy"
-                    placeholder="blur"
-                    blurDataURL="/placeholder.png"
                   />
                 </div>
                 <div className="p-4">

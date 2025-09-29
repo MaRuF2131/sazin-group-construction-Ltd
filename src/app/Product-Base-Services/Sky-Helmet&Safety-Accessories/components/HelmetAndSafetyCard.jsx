@@ -15,7 +15,7 @@ const HelmetAndSafetyCard = ({ data }) => {
             {(data || []).map((item, index) => (
               <div
                 key={index}
-                className="max-w-sm bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition-transform duration-300 hover:shadow-2xl hover:scale-105"
+                className="max-w-sm w-full h-full bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition-transform duration-300 hover:shadow-2xl hover:scale-105"
               >
                 {/* Image */}
                 <div className="overflow-hidden">
