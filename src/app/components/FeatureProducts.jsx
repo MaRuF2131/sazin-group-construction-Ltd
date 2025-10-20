@@ -1,25 +1,70 @@
-"use client";
-import { useState, useRef } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay, Grid } from "swiper/modules";
+'use client';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRef, useState } from 'react';
+import { Autoplay, Grid, Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/grid";
+import 'swiper/css';
+import 'swiper/css/grid';
+import 'swiper/css/navigation';
 
 const products = [
-  { id: 1, title: "Tools & Machineries", desc: "Tools & Machineries", img: "/electro.jpg" },
-  { id: 2, title: "Copper, Insulation", desc: "Tools & Machineries", img: "/openface.jpg" },
-  { id: 3, title: "Make to Order", desc: "Tools & Machineries", img: "/safety.jpg" },
-  { id: 4, title: "Others", desc: "Tools & Machineries", img: "/helmet1.jpg" },
-  { id: 5, title: "Extra Product", desc: "Tools & Machineries", img: "/safety2.webp" },
-  { id: 6, title: "New Product", desc: "Tools & Machineries", img: "/epc2.avif" },
-  { id: 7, title: "Another Product", desc: "Tools & Machineries", img: "/helmet.jpg" },
-  { id: 8, title: "Special Item", desc: "Tools & Machineries", img: "/civil3.jpg" },
-  { id: 9, title: "Machinery", desc: "Tools & Machineries", img: "/fullface.jpg" },
-  { id: 10, title: "Equipment", desc: "Tools & Machineries", img: "/epc1.jpg" },
+  {
+    id: 1,
+    title: 'Ball Valve',
+    desc: 'Used to control fluid flow.',
+    img: '/ballvalve.jpeg',
+  },
+  {
+    id: 2,
+    title: 'Gate Valve Series',
+    desc: 'For on-off fluid control.',
+    img: '/gatevalveseries.jpeg',
+  },
+  {
+    id: 3,
+    title: 'Check Valve',
+    desc: 'Prevents backflow of liquid.',
+    img: '/checkvalve.jpeg',
+  },
+  {
+    id: 4,
+    title: 'Gate Valve',
+    desc: 'Controls liquid passage.',
+    img: '/gatevalve.jpeg',
+  },
+  {
+    id: 5,
+    title: 'Extra Product',
+    desc: 'Tools & Machineries',
+    img: '/safety2.webp',
+  },
+  {
+    id: 6,
+    title: 'New Product',
+    desc: 'Tools & Machineries',
+    img: '/epc2.avif',
+  },
+  {
+    id: 7,
+    title: 'Another Product',
+    desc: 'Tools & Machineries',
+    img: '/helmet.jpg',
+  },
+  {
+    id: 8,
+    title: 'Special Item',
+    desc: 'Tools & Machineries',
+    img: '/civil3.jpg',
+  },
+  {
+    id: 9,
+    title: 'Machinery',
+    desc: 'Tools & Machineries',
+    img: '/fullface.jpg',
+  },
+  { id: 10, title: 'Equipment', desc: 'Tools & Machineries', img: '/epc1.jpg' },
 ];
 
 export default function FeatureProducts() {
@@ -40,7 +85,7 @@ export default function FeatureProducts() {
           modules={[Navigation, Autoplay, Grid]}
           spaceBetween={20}
           slidesPerView={1} // Default, overridden by breakpoints
-          grid={{ rows: 2, fill: "row" }}
+          grid={{ rows: 2, fill: 'row' }}
           loop={true}
           speed={800} // Smoother transition
           autoplay={{
@@ -48,8 +93,8 @@ export default function FeatureProducts() {
             disableOnInteraction: false,
           }}
           navigation={{
-            nextEl: ".custom-next",
-            prevEl: ".custom-prev",
+            nextEl: '.custom-next',
+            prevEl: '.custom-prev',
           }}
           onSwiper={(swiper) => (swiperRef.current = swiper)}
           onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex + 2)}
@@ -74,8 +119,12 @@ export default function FeatureProducts() {
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="text-gray-500 dark:text-white">{product.title}</h3>
-                  <h3 className="text-base font-bold dark:text-white">{product.desc}</h3>
+                  <h3 className="text-gray-500 dark:text-white">
+                    {product.title}
+                  </h3>
+                  <h3 className="text-base font-bold dark:text-white">
+                    {product.desc}
+                  </h3>
                 </div>
               </div>
             </SwiperSlide>
@@ -91,7 +140,11 @@ export default function FeatureProducts() {
               →
             </button>
 
-            <Link prefetch={false} href="/Product-Base-Services/Sky-Helmet&Safety-Accessories" className="text-red-600 text-xl hover:underline">
+            <Link
+              prefetch={false}
+              href="/Product-Base-Services/Sky-Helmet&Safety-Accessories"
+              className="text-red-600 text-xl hover:underline"
+            >
               See All
             </Link>
           </div>
