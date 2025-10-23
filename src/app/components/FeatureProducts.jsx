@@ -89,7 +89,7 @@ export default function FeatureProducts() {
           loop={true}
           speed={800} // Smoother transition
           autoplay={{
-            delay: 3000,
+            delay: 2000,
             disableOnInteraction: false,
           }}
           navigation={{
@@ -101,7 +101,7 @@ export default function FeatureProducts() {
           breakpoints={{
             640: { slidesPerView: 2, grid: { rows: 2 } },
             1024: { slidesPerView: 3, grid: { rows: 2 } },
-            1280: { slidesPerView: 5, grid: { rows: 2 } },
+            1280: { slidesPerView: 4, grid: { rows: 2 } },
           }}
           onPointerEnter={() => swiperRef.current?.autoplay.stop()}
           onPointerLeave={() => swiperRef.current?.autoplay.start()}
