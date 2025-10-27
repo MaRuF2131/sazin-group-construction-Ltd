@@ -1,78 +1,71 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Autoplay, Grid, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import 'swiper/css/grid';
 import 'swiper/css/navigation';
+import DynamicFetch from '@/utils/DynamicFetch';
+import Loader from '@/components/Loader';
+import ErrorCard from '@/components/ErrorCard';
 
-const products = [
-  {
-    id: 1,
-    title: 'Ball Valve',
-    desc: 'Used to control fluid flow.',
-    img: '/ballvalve.jpeg',
-  },
-  {
-    id: 2,
-    title: 'Gate Valve Series',
-    desc: 'For on-off fluid control.',
-    img: '/gatevalveseries.jpeg',
-  },
-  {
-    id: 3,
-    title: 'Check Valve',
-    desc: 'Prevents backflow of liquid.',
-    img: '/checkvalve.jpeg',
-  },
-  {
-    id: 4,
-    title: 'Gate Valve',
-    desc: 'Controls liquid passage.',
-    img: '/gatevalve.jpeg',
-  },
-  {
-    id: 5,
-    title: 'Extra Product',
-    desc: 'Tools & Machineries',
-    img: '/safety2.webp',
-  },
-  {
-    id: 6,
-    title: 'New Product',
-    desc: 'Tools & Machineries',
-    img: '/epc2.avif',
-  },
-  {
-    id: 7,
-    title: 'Another Product',
-    desc: 'Tools & Machineries',
-    img: '/helmet.jpg',
-  },
-  {
-    id: 8,
-    title: 'Special Item',
-    desc: 'Tools & Machineries',
-    img: '/civil3.jpg',
-  },
-  {
-    id: 9,
-    title: 'Machinery',
-    desc: 'Tools & Machineries',
-    img: '/fullface.jpg',
-  },
-  { id: 10, title: 'Equipment', desc: 'Tools & Machineries', img: '/epc1.jpg' },
-];
 
 export default function FeatureProducts() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const swiperRef = useRef(null);
 
+  const [products,setproducts]=useState([])
+
+// access feature project
+   const  {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    refetch
+  }=DynamicFetch("product","","",true)
+const loadMoreRef = useRef();
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(()=>{
+     if(data){
+       const value=data?.pages?.flatMap((page) => page?.data).slice(0,21) || [];
+       setproducts(value)
+     } 
+  },[data])
+
+ if (status === 'pending')
+    return (
+      <Loader type={"products"}></Loader>
+    );
+
+  if (status === "error") return (
+      <ErrorCard type={"products"} refetch={refetch}></ErrorCard>
+  );
+
   return (
-    <section className="py-14 bg-white dark:bg-neutral-950 transition-colors duration-500">
+    <section ref={loadMoreRef} className="py-14 bg-white dark:bg-neutral-950 transition-colors duration-500">
       <div className="container mx-auto px-4">
         <h2 className="text-left text-3xl text-gray-900 font-semi-bold mb-2 dark:text-white">
           Featured <span className="text-red-500">Products</span>
@@ -81,7 +74,7 @@ export default function FeatureProducts() {
           Stands for sustainable luxury products
         </p>
 
-        <Swiper
+      {products.length > 0 &&  <Swiper
           modules={[Navigation, Autoplay, Grid]}
           spaceBetween={20}
           slidesPerView={1} // Default, overridden by breakpoints
@@ -107,12 +100,12 @@ export default function FeatureProducts() {
           onPointerLeave={() => swiperRef.current?.autoplay.start()}
         >
           {products.map((product) => (
-            <SwiperSlide key={product.id}>
+            <SwiperSlide key={product._id}>
               <div className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
                 <div className="relative w-full h-40">
                   <Image
-                    src={product.img}
-                    alt={product.title}
+                    src={product?.imageUrl}
+                    alt={product?.productName}
                     fill
                     className="object-cover"
                     loading="lazy"
@@ -120,16 +113,17 @@ export default function FeatureProducts() {
                 </div>
                 <div className="p-4">
                   <h3 className="text-gray-500 dark:text-white">
-                    {product.title}
+                    {product?.productName}
                   </h3>
                   <h3 className="text-base font-bold dark:text-white">
-                    {product.desc}
+                    {product?.title}
                   </h3>
                 </div>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
+   }
 
         <div className="flex justify-between items-center mt-4">
           <div className="flex items-center gap-4 pt-3">

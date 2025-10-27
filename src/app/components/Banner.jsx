@@ -84,7 +84,7 @@ const Banner = () => {
 
   return (
     <section
-      className="relative w-full min-h-[70vh] md:min-h-[80vh] lg:min-h-[90vh] overflow-hidden"
+      className="relative -mt-25 w-full min-h-[70vh] md:min-h-[80vh] lg:min-h-[100vh] overflow-hidden"
       aria-label="Hero banner with company introduction and call to action"
     >
       <AnimatePresence>

@@ -2,13 +2,14 @@
 import React,{ useEffect, useRef, useState } from 'react'
 import Helmetsads from './Helmetsads'
 import {AnimatedSection2,AnimatedSection} from '@/utils/ScrollMontion'
-import Category from './CategoryCard'
+import Category from './CategoryList'
 function CategotySection() {
-const [helmHeight, setHelmHeight] = useState(0);
-const helmRef = useRef();
-useEffect(() => {
-  setHelmHeight(helmRef.current.offsetHeight);
-}, [helmRef.current]);
+
+      const [helmHeight, setHelmHeight] = useState(0);
+      const helmRef = useRef();
+      useEffect(() => {
+        setHelmHeight(helmRef.current.offsetHeight);
+      }, [helmRef.current]);
 
   return (
    <>

@@ -1,62 +1,51 @@
 "use client";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
-import { blogData } from "./blogData";
 import BlogCard from "./BlogCard";
+import DynamicFetch from "@/utils/DynamicFetch";
+import Loader from "@/components/Loader";
+import ErrorCard from "@/components/ErrorCard";
 
-async function fetchBlogs({ pageParam = 1 }) {
-  const limit = 2;
-  const start = (pageParam - 1) * limit;
-  const end = start + limit;
-
-  const pageData = blogData.slice(start, end);
-
-  return {
-    data: pageData,
-    hasMore: end < blogData.length,
-  };
-}
 
 export default function BlogList() {
-  const loadMoreRef = useRef(null);
 
-  const {
+ const  {
     data,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    isLoading,
-  } = useInfiniteQuery({
-    queryKey: ["blogs"],
-    queryFn: fetchBlogs,
-    getNextPageParam: (lastPage, pages) =>
-      lastPage.hasMore ? pages.length + 1 : undefined,
-        // 🔹 Performance Tunings
-    staleTime: 1000 * 60 * 5, // 5 minutes → reduce refetching
-    cacheTime: 1000 * 60 * 30, // 30 minutes cache in memory
-    refetchOnWindowFocus: false, // don’t refetch unnecessarily
-    refetchOnReconnect: false, // no refetch if net reconnects
-    retry: 1, // retry only once if fails
-  });
-
+    status,
+    refetch
+  }=DynamicFetch("news","","","")
+const loadMoreRef = useRef();
   useEffect(() => {
     if (!loadMoreRef.current) return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
       },
-      { rootMargin: "200px" }
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
     );
-
     observer.observe(loadMoreRef.current);
 
-    return () => {
-      if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
-    };
+    return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+
+ if (status === 'pending')
+    return (
+      <Loader type={"news"}></Loader>
+    );
+
+  if (status === "error") return (
+      <ErrorCard type={"news"} refetch={refetch}></ErrorCard>
+  );
+
 
   // ✅ JSON-LD for Blog + ItemList
   const jsonLd = {
@@ -64,38 +53,37 @@ export default function BlogList() {
     "@type": "Blog",
     headline: "Our Latest Blog Posts",
     description: "Read the latest articles and insights from our blog.",
-    blogPost: blogData.map((post) => ({
+    blogPost:data?.pages.map((page)=>page?.data.map((post) => ({
       "@type": "BlogPosting",
-      headline: post.title,
-      image: post.image,
+      headline: post.newstitle,
+      image: post.imageUrl,
       datePublished: new Date(post.date).toISOString(),
       author: {
         "@type": "Person",
         name: post.author,
       },
-      description: post.content.slice(0, 160),
-    })),
+      description: post?.description.slice(0, 160),
+    }))),
   };
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    itemListElement: blogData.map((post, index) => ({
+    itemListElement: data?.pages.map((page)=>page?.data.map((post, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: post.title,
-      url: `https://www.yourdomain.com/news-blog`,
-    })),
+      url: `https://sazin.com.bd/news-blog`,
+    }))),
   };
 
   return (
     <section
       className="flex flex-col items-center max-w-2xl mx-auto space-y-8"
     >
-      {isLoading && <p className="text-center dark:text-white">Loading posts...</p>}
 
       {data?.pages.map((page) =>
-        page.data.map((post) => <BlogCard key={post.id} post={post} />)
+        page.data.map((post) => <BlogCard key={post._id} post={post} />)
       )}
 
       {/* Loader trigger element */}

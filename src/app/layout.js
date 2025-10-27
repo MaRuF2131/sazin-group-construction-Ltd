@@ -44,12 +44,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${montserrat.className} bg-black  dark:bg-gray-800`}>
+    <html lang="en" className={`${montserrat.className} bg-gray-400  dark:bg-gray-800`}>
       <body>
         <Providers>
           <ScrollToTop />
           <Navbar />
-          {children}
+          <div className='mt-25'>
+                        {children}
+          </div>
           <SpeedInsights />
           <Footer />
 

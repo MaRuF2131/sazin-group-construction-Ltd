@@ -1,6 +1,10 @@
 // AchievementDetail.jsx
 'use client';
+import ErrorCard from '@/components/ErrorCard';
+import Loader from '@/components/Loader';
+import DynamicFetch from '@/utils/DynamicFetch';
 import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
 import {
   FaAward,
   FaBuilding,
@@ -11,7 +15,7 @@ import {
 } from 'react-icons/fa';
 
 export default function AchievementDetail() {
-  const achievements = [
+/*   const achievements = [
     {
       icon: <FaHardHat className="text-2xl text-red-600 dark:text-red-400" />,
       title: 'Rooppur Nuclear Power Plant Project',
@@ -32,7 +36,56 @@ export default function AchievementDetail() {
       title: 'Sustainable Growth',
       desc: 'Maintained consistent financial performance with over 1156 crore BDT total turnover in the last five years, demonstrating business stability and growth.',
     },
-  ];
+  ]; */
+
+   const [achievements,setachievements]=useState([])
+  // access feature project
+     const  {
+      data,
+      fetchNextPage,
+      hasNextPage,
+      isFetchingNextPage,
+      status,
+      refetch
+    }=DynamicFetch("achievement","","","")
+  const loadMoreRef = useRef();
+    useEffect(() => {
+      if (!loadMoreRef.current) return;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        },
+        {
+          root: null,
+          rootMargin: "0px",
+          threshold: 0.1,
+        }
+      );
+      observer.observe(loadMoreRef.current);
+  
+      return () => observer.disconnect();
+    }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  
+    useEffect(()=>{
+       if(data){
+         const value=data?.pages?.flatMap((page) => page?.data) || [];
+         setachievements(value)
+       } 
+    },[data])
+
+ 
+   if (status === 'pending')
+      return (
+        <Loader type={"achievements"}></Loader>
+      );
+  
+    if (status === "error") return (
+        <ErrorCard type={"achievements"} refetch={refetch}></ErrorCard>
+    );
+  
+  
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -115,7 +168,7 @@ export default function AchievementDetail() {
         </div>
 
         {/* Achievement Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+        <div ref={loadMoreRef} className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
           {achievements.map((item, idx) => (
             <div
               key={idx}
@@ -123,14 +176,14 @@ export default function AchievementDetail() {
             >
               <div className="flex items-start mb-6">
                 <div className="bg-red-100 dark:bg-red-900/30 p-3 rounded-full mr-4">
-                  {item.icon}
+                  <FaHardHat className="text-2xl text-red-600 dark:text-red-400" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2">
-                    {item.title}
+                    {item?.achievement}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300">
-                    {item.desc}
+                    {item?.description}
                   </p>
                 </div>
               </div>

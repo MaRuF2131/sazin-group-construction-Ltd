@@ -18,11 +18,11 @@ export const metadata = {
     title: "Civil Construction | Sazin Construction Ltd.",
     description:
       "Residential, commercial, and industrial building construction solutions with quality, safety, and timely delivery from Sazin Construction Ltd.",
-    url: "https://yourdomain.com/civil-construction",
+    url: "https://sazin.com.bd/Civil-construction",
     siteName: "Sazin Construction Ltd.",
     images: [
       {
-        url: "https://yourdomain.com/og-image.jpg",
+        url: "https://sazin.com.bd/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Civil Construction Projects",
@@ -41,8 +41,8 @@ const civilJsonLd = {
   provider: {
     "@type": "Organization",
     name: "Sazin Construction Ltd.",
-    url: "https://yourdomain.com",
-    logo: "https://yourdomain.com/logo.png",
+    url: "https://sazin.com.bd",
+    logo: "https://sazin.com.bd/logo.png",
     address: {
       "@type": "PostalAddress",
       streetAddress: "House #42, Road #07, Section-10, Mirpur",

@@ -13,6 +13,7 @@
     "@tanstack/react-query-devtools": "^5.85.5",
     "@vercel/speed-insights": "^1.2.0",
     "aos": "^2.3.4",
+    "axios": "^1.12.2",
     "framer-motion": "^12.23.12",
     "localforage": "^1.10.0",
     "lucide-react": "^0.540.0",

@@ -1,10 +1,27 @@
 'use client'
-import HelmetAndSafetyCard from '../app/Product-Base-Services/Sky-Helmet&Safety-Accessories/components/HelmetAndSafetyCard'
+import HelmetAndSafetyCard from './HelmetAndSafetyCard'
 import React, { useRef, useEffect, useState } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchProducts } from "./FetchFunction";
 import { FiSearch } from "react-icons/fi";
-
+import Loader from '@/components/Loader';
+import ErrorCard from '@/components/ErrorCard';
+import DynamicFetch from '../../../../utils/DynamicFetch';
+ const ct=[
+        "All",
+        "Welding Helmets & Gloves",
+        "Fall Protection Harness",
+        "Coveralls / Suits",
+        "Respirators / Masks",
+        "High-Visibility Safety Vests",
+        "Safety Shoes / Gumboots",
+        "Safety Gloves",
+        "Ear Plugs / Ear Muffs",
+        "Safety Goggles / Face Shields",
+        "Safety Helmets (Hard Hats)",
+        "Half Face",
+        "Open Face",
+        "Modular Face",
+        "Full Face"
+    ]
 
 export default function QueryFunction({value ,ky}) {
   const[mainData,setMainData]=useState([]);
@@ -13,44 +30,16 @@ export default function QueryFunction({value ,ky}) {
   const [filterPrice, setFilterPrice] = useState("all");
   const [sort, setSort] = useState("none");
 
-  const {
+// access feature project
+   const  {
     data,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     status,
     refetch
-  } = useInfiniteQuery({
-    queryKey: ["products",query,ky],
-    queryFn: ({ pageParam = 1 }) => fetchProducts(pageParam,query,ky ),
-    getNextPageParam: (lastPage) => lastPage.nextPage,
-     // 🔹 Performance Tunings
-    staleTime: 1000 * 60 * 5, // 5 minutes → reduce refetching
-    cacheTime: 1000 * 60 * 30, // 30 minutes cache in memory
-    refetchOnWindowFocus: false, // don’t refetch unnecessarily
-    refetchOnReconnect: false, // no refetch if net reconnects
-    retry: 1, // retry only once if fails
-  });
-  useEffect(() => {
-    refetch();
-    console.log("Refetching data...", { query, ky });
-    
-  }, [query, refetch, ky]);
-   
-  useEffect(()=>{
-      setQuery(value);
-      setSort("none");
-      setFilterPrice("all");
-      setSearch("");
-  },[value,query,ky])
-
-  useEffect(()=>{
-        const allData = data?.pages?.map(page => page?.data || []).flat();
-        setMainData(allData);
-  },[data])
-
-  const loadMoreRef = useRef();
-
+  }=DynamicFetch("product","category",query,'')
+const loadMoreRef = useRef();
   useEffect(() => {
     if (!loadMoreRef.current) return;
     const observer = new IntersectionObserver(
@@ -70,14 +59,25 @@ export default function QueryFunction({value ,ky}) {
     return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
+  useEffect(() => {
+  setQuery(value);
+}, [value, ky]); 
+
+  useEffect(()=>{
+      setSort("none");
+      setFilterPrice("all");
+      setSearch("");
+  },[query])
+
+
   
   // Filtering & Sorting Logic
   const filterAndSortData = () => {
     let filtered = data?.pages?.map(page => page?.data || []).flat() || [];
-    if(filtered.length<=0) return ;
+    if(filtered.length<=0){setMainData([]); return ;}
     if (search) {
       filtered = filtered.filter((item) =>
-        item?.title?.toLowerCase().includes(search.toLowerCase())
+        item?.productName?.toLowerCase().includes(search.toLowerCase())
       );
     }
 
@@ -93,9 +93,6 @@ export default function QueryFunction({value ,ky}) {
     } else if (sort === "desc") {
       filtered = [...filtered].sort((a, b) => b.price - a.price) || [];
     }
-
-        console.log('fillllll',filtered);
-
     setMainData(filtered);
   };
 
@@ -103,8 +100,6 @@ export default function QueryFunction({value ,ky}) {
      filterAndSortData();
   }, [search,filterPrice,sort,data]);
 
-  if (status === "loading") return <p className='text-center dark:text-white'>Loading...</p>;
-  if (status === "error") return <p className='text-center dark:text-white'>Error fetching products!</p>;
 
   return (
   <div className="container mx-auto w-full md:p-8 p-4">
@@ -131,11 +126,9 @@ export default function QueryFunction({value ,ky}) {
             onChange={(e) => setQuery(e.target.value)}
             className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-1 focus:ring-red-800 focus:outline-none bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100"
           >
-            <option value="all">All Categories</option>
-            <option value="Full-Face">Full-Face</option>
-            <option value="Half-Face">Half-Face</option>
-            <option value="Open-Face">Open-Face</option>
-            <option value="Modular-Face">Modular-Face</option>
+            {ct.map((cat,indx)=>(
+              <option key={indx} value={cat}>{cat}</option>
+            ))}
           </select>
 
           <select
@@ -159,7 +152,15 @@ export default function QueryFunction({value ,ky}) {
           </select>
         </div>
       </div>
-        <HelmetAndSafetyCard data={mainData} />
+
+         {status === 'pending' && (
+           <Loader type={"products"}></Loader>
+          )}
+
+         {status === "error" && (
+           <ErrorCard type={"products"} refetch={refetch}></ErrorCard>
+         )}
+        {mainData.length > 0   && <HelmetAndSafetyCard data={mainData} />}
   
       {/* Sentinel element for IntersectionObserver */}
       <div ref={loadMoreRef} className=" w-full z-[999]  h-10 mt-5 text-center">

@@ -6,17 +6,17 @@ export const metadata = {
   description:
     "Latest updates, industry insights, and company news from Sazin Construction Ltd. Explore articles, blogs, and expert opinions.",
   alternates: {
-    canonical: "https://www.yourdomain.com/news-blog",
+    canonical: "https://sazin.com.bd/news-blog",
   },
   openGraph: {
     title: "News & Blog | Sazin Construction Ltd.",
     description:
       "Stay updated with the latest news, blogs, and insights from Sazin Construction Ltd.",
-    url: "https://www.yourdomain.com/news-blog",
+    url: "https://sazin.com.bd/news-blog",
     type: "website",
     images: [
       {
-        url: "https://www.yourdomain.com/og-news.jpg",
+        url: "https://sazin.com.bd/og-news.jpg",
         width: 1200,
         height: 630,
         alt: "Sazin Construction Ltd. News and Blog",
@@ -28,7 +28,7 @@ export const metadata = {
     title: "News & Blog | Sazin Construction Ltd.",
     description:
       "Latest updates, industry insights, and company news from Sazin Construction Ltd.",
-    images: ["https://www.yourdomain.com/og-news.jpg"],
+    images: ["https://sazin.com.bd/og-news.jpg"],
   },
 };
 
@@ -54,7 +54,7 @@ export default function NewsBlogPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Blog",
-            url: "https://www.yourdomain.com/news-blog",
+            url: "https://sazin.com.bd/news-blog",
             name: "News & Blog | Sazin Construction Ltd.",
             description:
               "Latest updates, industry insights, and company news from Sazin Construction Ltd.",
@@ -63,7 +63,7 @@ export default function NewsBlogPage() {
               name: "Sazin Construction Ltd.",
               logo: {
                 "@type": "ImageObject",
-                url: "https://www.yourdomain.com/logo.png",
+                url: "https://sazin.com.bd/logo.png",
               },
             },
           }),

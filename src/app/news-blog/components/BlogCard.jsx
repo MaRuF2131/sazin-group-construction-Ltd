@@ -9,8 +9,8 @@ export default function BlogCard({ post }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline: post.title,
-    image: post.image,
+    headline: post.newstitle,
+    image: post.imageUrl,
     datePublished: new Date(post.date).toISOString(),
     dateModified: new Date(post.date).toISOString(),
     author: {
@@ -19,13 +19,13 @@ export default function BlogCard({ post }) {
     },
     publisher: {
       "@type": "Organization",
-      name: "Your Website Name",
+      name: "sazin construction ltd",
       logo: {
         "@type": "ImageObject",
         url: "/logo.png",
       },
     },
-    description: post.content.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 160),
+    description: post?.description.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 160),
   };
 
   return (
@@ -33,8 +33,8 @@ export default function BlogCard({ post }) {
       {/* Image */}
       <div className="w-full aspect-[16/9] overflow-hidden">
         <Image
-          src={post.image}
-          alt={post.title}
+          src={post?.imageUrl}
+          alt={post?.newstitle}
           width={500}
           height={300}
           className="w-full h-full object-cover transition-transform duration-300"
@@ -47,26 +47,26 @@ export default function BlogCard({ post }) {
       {/* Content */}
       <div className="p-5">
         <div className="text-sm text-neutral-500 dark:text-neutral-400">
-          {post.date} · {post.author}
+          {new Date(post?.date).toLocaleString()} · {post?.author}
         </div>
 
         <h3 className="text-xl font-semibold mt-2 text-neutral-900 dark:text-neutral-100">
-          {post.title}
+          {post.newstitle}
         </h3>
 
         <p className="mt-2 text-neutral-600 dark:text-neutral-300 leading-relaxed">
           {expanded
-            ? post.content
-            : post.content.slice(0, 100) +
-              (post.content.length > 100 ? "..." : "")}
+            ? post?.description
+            : post?.description.slice(0, 100) +
+              (post?.description.length > 100 ? "..." : "")}
         </p>
 
         <button
           onClick={() => setExpanded(!expanded)}
-          disabled={post.content.length <= 100}
+          disabled={post?.description.length <= 100}
           aria-expanded={expanded}
           className={`mt-4 inline-block text-red-600 font-semibold ${
-            post.content.length <= 100
+            post?.description.length <= 100
               ? "cursor-not-allowed opacity-50"
               : "hover:underline underline-offset-3"
           } transition`}

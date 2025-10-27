@@ -5,7 +5,7 @@ import React from "react";
 export default function Hero({ data }) {
   return (
     <section
-      className="relative w-full bg-cover bg-center min-h-[60vh] md:min-h-[72vh] lg:min-h-[80vh] flex items-center"
+      className="relative -mt-25 w-full bg-cover bg-center min-h-[70vh] md:min-h-[80vh] lg:min-h-[100vh] flex items-center"
       style={{
         backgroundImage: `linear-gradient(rgba(2,6,23,0.45), rgba(2,6,23,0.25)), url(${data.heroImage})`,
       }}

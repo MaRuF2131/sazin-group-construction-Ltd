@@ -3,23 +3,16 @@
 import Link from 'next/link';
 
 import { motion } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import { FaBuilding } from 'react-icons/fa';
 import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import Loader from '@/components/Loader';
+import ErrorCard from '@/components/ErrorCard';
+import DynamicFetch from '@/utils/DynamicFetch';
 
-const clients = [
-  { name: 'Public Works Department (PWD)', icon: FaBuilding },
-  { name: 'Bangladesh Power Development Board', icon: FaBuilding },
-  { name: 'BPC & Petrobangla', icon: FaBuilding },
-  { name: 'Private Corporates', icon: FaBuilding },
-  { name: 'Grameen Bank', icon: FaBuilding },
-  { name: 'BRAC', icon: FaBuilding },
-  { name: 'Bangladesh Railway', icon: FaBuilding },
-  { name: 'Local NGOs', icon: FaBuilding },
-];
 
 export const metadata = {
   title: 'Our Clients & Partners | Your Company',
@@ -37,12 +30,59 @@ export default function Clients() {
   const swiperRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(1);
 
+    const [clients,setclients]=useState([])
+
+// access feature project
+   const  {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    refetch
+  }=DynamicFetch("client","","","")
+const loadMoreRef = useRef();
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(()=>{
+     if(data){
+       const value=data?.pages?.flatMap((page) => page?.data).slice(0,7) || [];
+       setclients(value)
+     } 
+  },[data])
+
+ if (status === 'pending')
+    return (
+      <Loader type={"clients"}></Loader>
+    );
+
+  if (status === "error") return (
+      <ErrorCard type={"clients"} refetch={refetch}></ErrorCard>
+  );
+
   const handleSlideChange = (swiper) => {
     setCurrentIndex(swiper.realIndex + 1);
   };
 
   return (
-    <section className="bg-white dark:bg-neutral-950 py-16 px-4 lg:px-8 transition-colors duration-500">
+    <section ref={loadMoreRef} className="bg-white dark:bg-neutral-950 py-16 px-4 lg:px-8 transition-colors duration-500">
       <div className="container mx-auto">
         {/* Heading */}
         <h2 className="text-3xl font-semibold text-left text-gray-800 dark:text-white">
@@ -69,9 +109,9 @@ export default function Clients() {
             navigation={false} // remove default arrows
           >
             {clients.map((client, i) => {
-              const Icon = client.icon;
+              const Icon = FaBuilding;
               return (
-                <SwiperSlide key={client.name}>
+                <SwiperSlide key={i}>
                   <motion.div
                     className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 p-4 rounded-lg shadow-sm hover:shadow-lg transition flex items-center gap-4 h-24 cursor-pointer"
                     whileHover={{ scale: 1.05 }}
@@ -87,12 +127,12 @@ export default function Clients() {
                       whileHover={{ scale: 1.2 }}
                       transition={{ type: 'spring', stiffness: 300 }}
                     >
-                      <Icon aria-label={client.name + ' logo'} />
+                      <Icon aria-label={client.partner + ' logo'} />
                     </motion.div>
 
                     {/* Text */}
                     <p className="text-gray-800 dark:text-gray-200 font-medium">
-                      {client.name}
+                      {client.partner}
                     </p>
                   </motion.div>
                 </SwiperSlide>

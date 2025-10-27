@@ -61,7 +61,7 @@ const Banner = () => {
   };
 
   return (
-    <section className="relative w-full h-[40vh] md:h-[70vh] lg:h-[90vh] overflow-hidden">
+    <section className="relative   w-full h-[70vh] md:h-[80vh] lg:h-[100vh] overflow-hidden">
       <AnimatePresence>
         {images.map((img, index) =>
           index === current ? (

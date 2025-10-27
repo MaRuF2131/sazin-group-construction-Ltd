@@ -1,15 +1,11 @@
 'use client'; // ⚠️ সবথেকে উপরে
 
+import ErrorCard from '@/components/ErrorCard';
+import Loader from '@/components/Loader';
+import DynamicFetch from '@/utils/DynamicFetch';
 import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
 
-const equipment = [
-  'Cranes & Heavy Lifters',
-  'Concrete Mixers',
-  'Generators',
-  'Excavators',
-  'Testing & Measuring Tools',
-  'Concrete Mixers',
-];
 
 export const metadata = {
   title: 'Our Equipment & Capabilities | Your Company',
@@ -24,8 +20,53 @@ export const metadata = {
 };
 
 export default function Equipment() {
+ const [equipment,setequipment]=useState([])
+// access feature project
+   const  {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    refetch
+  }=DynamicFetch("equipment","","","")
+const loadMoreRef = useRef();
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage ) {      
+          fetchNextPage();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(()=>{
+     if(data){
+       const value=data?.pages?.flatMap((page) => page?.data).slice(0,6) || [];
+       setequipment(value)
+     } 
+  },[data])
+
+ if (status === 'pending')
+    return (
+      <Loader type={"equipments"}></Loader>
+    );
+
+  if (status === "error") return (
+      <ErrorCard type={"equipments"} refetch={refetch}></ErrorCard>
+  );
   return (
-    <section className="bg-neutral-50 dark:bg-neutral-950 py-16 px-6 lg:px-8 transition-colors duration-500">
+    <section ref={loadMoreRef} className="bg-neutral-50 dark:bg-neutral-950 py-16 px-6 lg:px-8 transition-colors duration-500">
       <div className="container mx-auto">
         {/* Title */}
         <h2 className="text-3xl font-semibold text-left dark:text-white">
@@ -43,7 +84,7 @@ export default function Equipment() {
               className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700
               p-6 rounded-xl shadow-sm hover:shadow-lg transition font-semibold text-neutral-800 dark:text-neutral-200"
             >
-              {item}
+              {item?.equipment}
             </li>
           ))}
         </ul>

@@ -25,6 +25,7 @@ export default function Navbar() {
 
   const aboutRef = useRef(null);
   const businessRef = useRef(null);
+  const sazin=useRef(null)
 
   const menuData = {
     about: [
@@ -79,7 +80,7 @@ export default function Navbar() {
         prefetch: false,
       },
       {
-        name: "Sky Helmet & Safety Accessories",
+        name: "Revvo Helmet & Safety Accessories",
         href: "/Product-Base-Services/Sky-Helmet&Safety-Accessories",
         prefetch: false,
       },
@@ -100,9 +101,10 @@ export default function Navbar() {
       if (aboutRef.current?.contains(e.target)) {
         setDropdown({ about: !dropdown.about, business: false });
       } else if (businessRef.current?.contains(e.target)) {
-        setDropdown({ business: !dropdown.business, about: false });
+        if(sazin.current?.contains(e.target))setDropdown({ business:true, about: false });
+        else setDropdown({ business:!dropdown.business, about: false });
       } else {
-        setDropdown({ about: false, business: false });
+        setDropdown({ about: false, business:false});
       }
     };
     document.addEventListener("pointerdown", handleClickOutside);
@@ -157,13 +159,13 @@ export default function Navbar() {
   return (
     <>
       <motion.nav
-        className={`bg-white/90 dark:bg-black/70 backdrop-blur-lg sticky top-0 z-[9999] transition-all duration-300 ${
-          isScrolled ? "shadow-lg py-2" : "py-2"
+        className={`bg-transparent  fixed w-full  top-0 z-[9999] transition-all duration-300 ${
+          isScrolled ? "shadow-lg py-2 dark:text-white text-black" : "py-2 text-white"
         }`}
       >
         <div className="w-full max-w-[100rem] mx-auto px-4 flex justify-between items-center">
           {/* Logo */}
-          <Link href="/" prefetch className=" font-bold w-35 h-fit ">
+          <Link href="/" prefetch className=" font-bold w-40 h-fit ">
             {/* Company<span className="text-red-600">Logo</span> */}
             <Logo />
           </Link>
@@ -175,7 +177,7 @@ export default function Navbar() {
               <Link
                 href="/"
                 prefetch={true}
-                className={`text-gray-700 dark:text-gray-200  relative transition-colors ${theme[0]?.hover}`}
+                className={` relative transition-colors ${theme[0]?.hover}`}
               >
                 Home
               </Link>
@@ -190,7 +192,7 @@ export default function Navbar() {
                 ref={key === "about" ? aboutRef : businessRef}
               >
                 <button
-                  className={`relative cursor-pointer flex items-center gap-1 text-gray-700 dark:text-gray-200  transition-colors ${theme[0]?.hover}`}
+                  className={`relative cursor-pointer flex items-center gap-1   transition-colors ${theme[0]?.hover}`}
                 >
                   {key === "about" ? "About Us" : "Business/Products"}{" "}
                   {dropdown[key] ? (
@@ -213,14 +215,6 @@ export default function Navbar() {
                     >
                       {key === "business" && (
                         <ul
-                          onPointerLeave={(e) => {
-                            e.stopPropagation();
-                            setSazinDropdown(false);
-                          }}
-                          onPointerEnter={(e) => {
-                            e.stopPropagation();
-                            setSazinDropdown(true);
-                          }}
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
@@ -228,6 +222,11 @@ export default function Navbar() {
                           className=" bg-transparent  w-full rounded-md  space-y-2 z-50"
                         >
                           <button
+                            ref={sazin}
+                            onClick={(e) => {
+                            e.stopPropagation();
+                            setSazinDropdown(!sazinDropdown);
+                          }}
                             className={`relative w-full  cursor-pointer flex items-center justify-between gap-1 text-gray-700 dark:text-gray-200  transition-colors ${theme[0]?.hover}`}
                           >
                             Sazin Construction Ltd
@@ -280,7 +279,7 @@ export default function Navbar() {
               <Link
                 href="/Projects"
                 prefetch={true}
-                className={`text-gray-700 dark:text-gray-200 relative transition-colors ${theme[0]?.hover}`}
+                className={` relative transition-colors ${theme[0]?.hover}`}
               >
                 Projects
               </Link>
@@ -290,7 +289,7 @@ export default function Navbar() {
             {/* More */}
             <li className="relative group py-2">
               <button
-                className={`relative flex items-center gap-1 text-gray-800 dark:text-gray-200  transition-colors ${theme[0]?.hover}`}
+                className={`relative flex items-center gap-1   transition-colors ${theme[0]?.hover}`}
               >
                 More Details{" "}
                 <span className="transition-transform duration-300 group-hover:rotate-180">
@@ -327,7 +326,7 @@ export default function Navbar() {
             <Theme theme={theme} />
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="text-gray-800 dark:text-gray-200"
+              className=""
             >
               <svg
                 className="w-6 h-6"
@@ -400,8 +399,51 @@ export default function Navbar() {
                         pathname.startsWith(item.href)
                       ) && <ActiveBorder />}
                     </button>
+
                     {mobileDropdown[key] && (
                       <ul className="pl-4 mt-2 space-y-2 relative">
+                        {key === "business" && (
+                        <ul
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSazinDropdown(!sazinDropdown);
+                          }}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className=" bg-transparent  w-full rounded-md  space-y-2 z-50"
+                        >
+                          <button
+                            className={`relative w-full  cursor-pointer flex items-center justify-between gap-1 text-gray-700 dark:text-gray-200  transition-colors ${theme[0]?.hover}`}
+                          >
+                            Sazin Construction Ltd
+                            {sazinDropdown ? (
+                              <FaChevronUp className="w-4 h-4" />
+                            ) : (
+                              <FaChevronDown className="w-4 h-4" />
+                            )}
+                            {menuData?.sazin_dropdown.some((item) =>
+                              pathname.startsWith(item.href)
+                            ) && <ActiveBorder />}
+                          </button>
+                          {sazinDropdown &&
+                            menuData?.sazin_dropdown.map((link, idx) => (
+                              <li key={idx} className="relative pl-2">
+                                <Link
+                                  href={link.href}
+                                  prefetch={link.prefetch}
+                                  className={`block text-sm text-gray-800 dark:text-gray-200  relative transition-colors ${theme[0]?.hover}`}
+                                >
+                                  {link.name}
+                                  {pathname.startsWith(link.href) && (
+                                    <ActiveBorder />
+                                  )}
+                                </Link>
+                              </li>
+                            ))}
+                        </ul>
+                      )}
                         {menuData[key].map((link, idx2) => (
                           <li key={idx2} className="relative">
                             <Link

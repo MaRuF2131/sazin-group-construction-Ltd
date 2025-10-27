@@ -5,34 +5,35 @@ import { HiMenu, HiX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 
-const option = [
-  {
-    name: "Revvo Helmet",
-    link: "/Product-Base-Services/Sky-Helmet&Safety-Accessories/Sky-Helmet",
-    submenu: [
-      { name: "Full Face", link: "/Product-Base-Services/Sky-Helmet&Safety-Accessories/Sky-Helmet/Full-Face" },
-      { name: "Modular Face", link: "/Product-Base-Services/Sky-Helmet&Safety-Accessories/Sky-Helmet/Modular-Face" },
-      { name: "Open Face", link: "/Product-Base-Services/Sky-Helmet&Safety-Accessories/Sky-Helmet/Open-Face" },
-      { name: "Half Face", link: "/Product-Base-Services/Sky-Helmet&Safety-Accessories/Sky-Helmet/Half-Face" },
-    ],
-  },
-  {
-    name: "Safety Accessories",
-    link: "/Product-Base-Services/Sky-Helmet&Safety-Accessories/Safety-Accessories",
-    submenu: [
-      { name: "Safety Helmets (Hard Hats)", link: "/Product-Base-Services/Safety-Accessories/Helmets" },
-      { name: "Safety Goggles / Face Shields", link: "/Product-Base-Services/Safety-Accessories/Goggles" },
-      { name: "Ear Plugs / Ear Muffs", link: "/Product-Base-Services/Safety-Accessories/Hearing-Protection" },
-      { name: "Safety Gloves", link: "/Product-Base-Services/Safety-Accessories/Gloves" },
-      { name: "Safety Shoes / Gumboots", link: "/Product-Base-Services/Safety-Accessories/Shoes" },
-      { name: "High-Visibility Safety Vests", link: "/Product-Base-Services/Safety-Accessories/Vests" },
-      { name: "Respirators / Masks", link: "/Product-Base-Services/Safety-Accessories/Masks" },
-      { name: "Coveralls / Suits", link: "/Product-Base-Services/Safety-Accessories/Coverall" },
-      { name: "Fall Protection Harness", link: "/Product-Base-Services/Safety-Accessories/Harness" },
-      { name: "Welding Helmets & Gloves", link: "/Product-Base-Services/Safety-Accessories/Welding" },
-    ],
-  },
-];
+    const option=[
+        {name: "Revvo Helmet",
+         submenu:[
+          "Half Face",
+          "Open Face",
+          "Modular Face",
+          "Full Face"
+         ]
+        },
+        {
+          name: "Safety Accessories",
+          submenu:[
+            "Welding Helmets & Gloves",
+            "Fall Protection Harness",
+            "Coveralls / Suits",
+            "Respirators / Masks",
+            "High-Visibility Safety Vests",
+            "Safety Shoes / Gumboots",
+            "Safety Gloves",
+            "Ear Plugs / Ear Muffs",
+            "Safety Goggles / Face Shields",
+            "Safety Helmets (Hard Hats)",
+            "Half Face",
+            "Open Face",
+            "Modular Face",
+            "Full Face"
+          ]
+        }
+    ]
 
 function Navbar() {
   const [mobileMenu, setMobileMenu] = useState(false);
@@ -47,7 +48,7 @@ function Navbar() {
     const currentPath=pathname.split('/').filter(Boolean)
     if(currentPath.length>2){
       setProduct({
-        title: currentPath[2],
+        title:decodeURIComponent(currentPath[2]),
       })
     }else{
         setProduct({
@@ -75,14 +76,14 @@ function Navbar() {
         <ul className="hidden flex-1 h-full md:flex justify-center items-center gap-10 relative">
           {option.map((item, index) => (
             <li
-              key={item.name}
+              key={index}
               className="relative"
               onMouseEnter={() => setHoverIndex(index)}
               onMouseLeave={() => setHoverIndex(null)}
             >
-              <Link className="hover:text-gray-300" href={item.link} prefetch={false}>
+              <div className="hover:text-gray-300" >
                 {item.name}
-              </Link>
+              </div>
 
               {/* Animated Dropdown for Desktop */}
               <AnimatePresence>
@@ -95,13 +96,13 @@ function Navbar() {
                     className="absolute left-0 mt-2 bg-white/90 dark:bg-black text-black dark:text-white shadow-lg rounded-md w-70 z-50"
                   >
                     {item.submenu.map((sub) => (
-                      <li key={sub.name}>
+                      <li key={sub}>
                         <Link
-                          href={sub.link}
+                          href={`/Product-Base-Services/Sky-Helmet&Safety-Accessories/${encodeURIComponent(sub)}`}
                           prefetch={false}
                           className="block px-4 py-2 hover:bg-red-600 hover:text-white dark:hover:bg-red-600 dark:hover-text-white"
                         >
-                          {sub.name}
+                          {sub}
                         </Link>
                       </li>
                     ))}

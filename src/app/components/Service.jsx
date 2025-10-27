@@ -1,10 +1,13 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/navigation";
+import ErrorCard from "@/components/ErrorCard";
+import Loader from "@/components/Loader";
+import DynamicFetch from "@/utils/DynamicFetch";
 
 const services = [
   {
@@ -41,8 +44,55 @@ export default function Services() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const swiperRef = useRef(null);
 
+const [services,setservices]=useState([])
+
+// access feature project
+   const  {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    refetch
+  }=DynamicFetch("service","","","")
+const loadMoreRef = useRef();
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(()=>{
+     if(data){
+       const value=data?.pages?.flatMap((page) => page?.data) || [];
+       setservices(value)
+     } 
+  },[data])
+
+ if (status === 'pending')
+    return (
+      <Loader type={"services"}></Loader>
+    );
+
+  if (status === "error") return (
+      <ErrorCard type={"services"} refetch={refetch}></ErrorCard>
+  );
+
   return (
-    <section className="bg-neutral-50 dark:bg-neutral-950 py-16 px-6 lg:px-8">
+    <section ref={loadMoreRef} className="bg-neutral-50 dark:bg-neutral-950 py-16 px-6 lg:px-8">
       <div className="container mx-auto">
         {/* Title */}
         <h2 className="text-3xl font-semi-bold text-left dark:text-white">
@@ -81,11 +131,11 @@ export default function Services() {
               <article
                 className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 p-6 rounded-xl shadow-sm hover:shadow-lg transition h-full"
                 role="group"
-                aria-label={service.title}
+                aria-label={service.service}
               >
-                <h3 className="text-lg font-semibold text-red-600">{service.title}</h3>
+                <h3 className="text-lg font-semibold text-red-600">{service.service}</h3>
                 <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
-                  {service.desc}
+                  {service.description}
                 </p>
               </article>
             </SwiperSlide>

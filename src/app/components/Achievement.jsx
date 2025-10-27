@@ -3,37 +3,54 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import Loader from "@/components/Loader";
+import ErrorCard from "@/components/ErrorCard";
+import DynamicFetch from "@/utils/DynamicFetch";
 
-const achievements = [
-  {
-    title: "Best EPC Contractor Award",
-    description: "Recognized nationally for excellence in project execution.",
-    image: "https://i.postimg.cc/MnnY1fYp/images.jpg",
-    link: "/award-detail",
-  },
-  {
-    title: "Innovation in Safety",
-    description: "Awarded for outstanding workplace safety practices.",
-    image:
-      "https://i.postimg.cc/RW2LdCPQ/pngtree-golden-achievement-unlocked-celebrating-your-success-on-a-blue-3d-background-image-3808269.jpg",
-    link: "/award-detail",
-  },
-  {
-    title: "Global Recognition",
-    description: "Honored for sustainable and eco-friendly construction.",
-    image:
-      "https://i.postimg.cc/RW2LdCPQ/pngtree-golden-achievement-unlocked-celebrating-your-success-on-a-blue-3d-background-image-3808269.jpg",
-    link: "/award-detail",
-  },
-];
 
 export default function Achievement() {
   const [current, setCurrent] = useState(0);
+  const [achievements,setachievements]=useState([])
   const total = achievements.length;
+// access feature project
+   const  {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    refetch
+  }=DynamicFetch("achievement","","","")
+const loadMoreRef = useRef();
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+    observer.observe(loadMoreRef.current);
 
-  // AutoPlay Effect
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(()=>{
+     if(data){
+       const value=data?.pages?.flatMap((page) => page?.data).slice(0,4) || [];
+       setachievements(value)
+     } 
+  },[data])
+
+    // AutoPlay Effect
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % total);
@@ -42,12 +59,24 @@ export default function Achievement() {
   }, [total]);
 
   const nextSlide = () => setCurrent((prev) => (prev + 1) % total);
-  const prevSlide = () => setCurrent((prev) => (prev - 1 + total) % total);
+  const prevSlide = () => setCurrent((prev) => (prev - 1 + total) % total); 
+  const image="https://i.postimg.cc/RW2LdCPQ/pngtree-golden-achievement-unlocked-celebrating-your-success-on-a-blue-3d-background-image-3808269.jpg"
+  const link="/award-detail" 
+  
+   const { achievement, description} = achievements[current]||[];
+ if (status === 'pending')
+    return (
+      <Loader type={"achievements"}></Loader>
+    );
 
-  const { title, description, image, link } = achievements[current];
+  if (status === "error") return (
+      <ErrorCard type={"achievements"} refetch={refetch}></ErrorCard>
+  );
+
 
   return (
     <section
+      ref={loadMoreRef}
       className="py-16 px-4 md:px-6 lg:px-8 bg-neutral-50 dark:bg-neutral-950"
       aria-label="Company achievements and awards"
     >
@@ -65,12 +94,12 @@ export default function Achievement() {
               </p>
 
               <h3 className="text-xl md:text-2xl font-semibold text-red-600 mt-6 md:mt-8">
-                {title}
+                {achievement}
               </h3>
               <Link
                 prefetch={false}
                 href={link}
-                aria-label={`Read more about ${title}`}
+                aria-label={`Read more about ${achievement}`}
                 className="mt-2 inline-block text-red-600 font-medium hover:underline"
               >
                 Read More →
@@ -120,7 +149,7 @@ export default function Achievement() {
             <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-4 md:p-6 w-full max-w-md">
               <Image
                 src={image}
-                alt={`${title} - Achievement`}
+                alt={`${achievement} - Achievement`}
                 width={500}
                 height={320}
                 className="w-full h-[220px] md:h-[320px] object-contain rounded-lg"

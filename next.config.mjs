@@ -2,46 +2,47 @@
 const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
-  /* swcMinify: true, */ // JS/TS faster minify
-/*   output: 'standalone', // Vercel optimized deploy */
-  output: 'export', 
+
   images: {
-    domains: ["images.unsplash.com", "sazin.com.bd","i.postimg.cc"], // trusted sources,
-    /* formats: ["image/avif", "image/webp",'image/jpg'], */ // modern formats for optimization,
-    minimumCacheTTL: 60*60*24*30, // seconds, for stale images,
-    unoptimized: true
+    domains: ["images.unsplash.com","res.cloudinary.com","sazin.com.bd", "i.postimg.cc"],
+    minimumCacheTTL: 60 * 60 * 24 * 60, // 60 days
+    unoptimized: true, // keep next/image optimization ON
   },
-/*   async headers() {
+
+  async headers() {
     return [
       {
-        source: '/(.*)', // all routes
-        headers: [
-          
-           { key: 'Cache-Control', value: 'public, max-age=60, stale-while-revalidate=86400' }, // HTML short TTL
-
-        ],
-      },
-      {
-        source: '/_next/static/(.*)', // JS, CSS
+        // 🧭 HTML pages – short cache (because content can change)
+        source: "/(.*)",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable', // 1 year cache for static assets
+            key: "Cache-Control",
+            value: "public, max-age=60, stale-while-revalidate=86400",
           },
         ],
       },
-      {
-        source: '/images/(.*)', // public images
+/*       {
+        // ⚙️ Static JS/CSS files – 1 year immutable cache
+         source: "/_next/static/(.*)",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable', // 1 year cache
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      }, */
+      {
+        // 🖼️ Images and 🎥 Videos in /public – 1 year cache
+        source: "/(.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico|mp4|webm|mov|ogg))",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },
     ];
-  }, */
-
+  },
 };
 
 export default nextConfig;

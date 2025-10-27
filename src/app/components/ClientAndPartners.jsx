@@ -1,50 +1,57 @@
-import React from "react";
+"use client"
+import ErrorCard from "@/components/ErrorCard";
+import Loader from "@/components/Loader";
+import DynamicFetch from "@/utils/DynamicFetch";
+import React, { useEffect, useRef, useState } from "react";
 import { FaBuilding } from "react-icons/fa";
 
-const clients = [
-  { 
-    name: "Public Works Department (PWD)", 
-    icon: FaBuilding,
-    details: "Government department responsible for public infrastructure such as roads, bridges, and government buildings." 
-  },
-  { 
-    name: "Bangladesh Power Development Board", 
-    icon: FaBuilding,
-    details: "Main organization for electricity generation and distribution ensuring power supply across the country." 
-  },
-  { 
-    name: "BPC & Petrobangla", 
-    icon: FaBuilding,
-    details: "Key players in oil, gas, and energy sector managing exploration, extraction, and distribution." 
-  },
-  { 
-    name: "Private Corporates", 
-    icon: FaBuilding,
-    details: "Trusted corporate partners across multiple industries including finance, IT, and manufacturing." 
-  },
-  { 
-    name: "Grameen Bank", 
-    icon: FaBuilding,
-    details: "World-renowned microfinance institution empowering millions with access to small loans and financial services." 
-  },
-  { 
-    name: "BRAC", 
-    icon: FaBuilding,
-    details: "Largest NGO in Bangladesh working in education, healthcare, and community development with global impact." 
-  },
-  { 
-    name: "Bangladesh Railway", 
-    icon: FaBuilding,
-    details: "National railway service ensuring safe, affordable, and efficient connectivity nationwide." 
-  },
-  { 
-    name: "Local NGOs", 
-    icon: FaBuilding,
-    details: "Grassroots organizations actively working for community development and social welfare programs." 
-  },
-];
 
 const ClientAndPartners = () => {
+  const [clients,setclients]=useState([])
+// access feature project
+   const  {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    refetch
+  }=DynamicFetch("client","","","")
+const loadMoreRef = useRef();
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(()=>{
+     if(data){
+       const value=data?.pages?.flatMap((page) => page?.data)|| [];
+       setclients(value)
+     } 
+  },[data])
+
+ if (status === 'pending')
+    return (
+      <Loader type={"clients"}></Loader>
+    );
+
+  if (status === "error") return (
+      <ErrorCard type={"clients"} refetch={refetch}></ErrorCard>
+  );
   return (
     <div className="bg-white dark:bg-neutral-950 py-16 px-4 lg:px-8 transition-colors duration-500">
       <div className="container mx-auto">
@@ -57,9 +64,9 @@ const ClientAndPartners = () => {
         </p>
 
         {/* Cards */}
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div ref={loadMoreRef} className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {clients.map((client, idx) => {
-            const Icon = client.icon;
+            const Icon = FaBuilding;
             return (
               <div
                 key={idx}
@@ -72,12 +79,12 @@ const ClientAndPartners = () => {
 
                 {/* Name */}
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-                  {client.name}
+                  {client?.partner}
                 </h3>
 
                 {/* Description (Fixed height, scrollable on hover) */}
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 overflow-hidden group-hover:overflow-auto transition-all duration-300 h-[60px]">
-                  {client.details}
+                  {client?.description}
                 </p>
               </div>
             );

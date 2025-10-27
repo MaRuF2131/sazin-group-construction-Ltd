@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules"; // Lazy removed
@@ -8,21 +8,67 @@ import { Navigation, Autoplay } from "swiper/modules"; // Lazy removed
 import "swiper/css";
 import "swiper/css/navigation";
 import Link from "next/link";
+import DynamicFetch from "@/utils/DynamicFetch";
+import { FaInfoCircle } from "react-icons/fa";
+import Loader from "@/components/Loader";
+import ErrorCard from "@/components/ErrorCard";
 
-const projects = [
-  { title: "Rooppur Nuclear Plant", img: "/Nuclear.jpeg" },
-  { title: "560 Model Mosque", img: "/model-mosque.jpg" },
-  { title: "Medical Colleges", img: "/MedicalColleges.jpg" },
-  { title: "Metro Rail Depot", img: "/Metro.jpeg" },
-  { title: "Highway Bridge", img: "/Highway.jpg" },
-];
 
 export default function Projects() {
+
+
   const [currentIndex, setCurrentIndex] = useState(1);
   const swiperRef = useRef(null);
+  const [projects,setprojects]=useState([])
+
+// access feature project
+   const  {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    refetch
+  }=DynamicFetch("project","category","All",true)
+const loadMoreRef = useRef();
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(()=>{
+     if(data){
+       const value=data?.pages?.flatMap((page) => page?.data).slice(0,6) || [];
+       setprojects(value)
+     } 
+  },[data])
+
+ if (status === 'pending')
+    return (
+      <Loader type={"projects"}></Loader>
+    );
+
+  if (status === "error") return (
+      <ErrorCard type={"projects"} refetch={refetch}></ErrorCard>
+  );
 
   return (
-    <section className="bg-white dark:bg-neutral-950 py-16 px-6 lg:px-8">
+    <>
+    <section ref={loadMoreRef} className="bg-white dark:bg-neutral-950 py-16 px-6 lg:px-8">
       <div className="container mx-auto">
         <h2 className="text-3xl font-semi-bold text-left dark:text-white">
           Featured <span className="text-red-600">Projects</span>
@@ -59,7 +105,7 @@ export default function Projects() {
               <div className="rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-lg transition">
                 <div className="relative w-full h-48">
                   <Image
-                    src={p.img}
+                    src={p.imageUrl}
                     alt={p.title}
                     fill
                     className="object-cover"
@@ -100,5 +146,6 @@ export default function Projects() {
         </div>
       </div>
     </section>
+    </>
   );
 }

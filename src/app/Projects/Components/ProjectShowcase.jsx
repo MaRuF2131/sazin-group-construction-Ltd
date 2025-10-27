@@ -1,108 +1,85 @@
 "use client";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { projects } from "./projectsData";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
 import Image from "next/image";
 import Script from "next/script";
 import GalleryFilter from "@/app/project-gallery/components/GalleryFilter";
+import DynamicFetch from "@/utils/DynamicFetch";
+import Loader from "@/components/Loader";
+import ErrorCard from "@/components/ErrorCard";
 
-const limit = 6; // প্রতি page এ কয়টা project দেখাবে
-
-// Fake API (slice দিয়ে simulate করা হলো)
-const fetchProjects = async ({ pageParam = 1 }) => {
-  const start = (pageParam - 1) * limit;
-  const end = start + limit;
-
-  const pageData = projects.slice(start, end);
-
-  return {
-    data: pageData,
-    nextPage: end < projects.length ? pageParam + 1 : undefined,
-  };
-};
 
 export default function ProjectShowcaseInfinity() {
-  const {
+
+    const router = useRouter();
+
+  // Intersection Observer দিয়ে auto load
+   const loadMoreRef = useRef(null);
+   const [hoveredId, setHoveredId] = useState(null);
+   const [activeCategory, setActiveCategory] = useState("All");
+   const [filteredData, setFilteredData] = useState([]);
+   const categories=["Civil","Electro","Engineering-Procurement","Safe&Security","NHA","PGCB","PWD","BPC", "EED", "LGED","Agro"];
+
+   const  {
     data,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     status,
-  } = useInfiniteQuery({
-    queryKey: ["projects-infinity"],
-    queryFn: fetchProjects,
-    getNextPageParam: (lastPage) => lastPage.nextPage,
-           // 🔹 Performance Tunings
-    staleTime: 1000 * 60 * 5, // 5 minutes → reduce refetching
-    cacheTime: 1000 * 60 * 30, // 30 minutes cache in memory
-    refetchOnWindowFocus: false, // don’t refetch unnecessarily
-    refetchOnReconnect: false, // no refetch if net reconnects
-    retry: 1, // retry only once if fails
-  });
+    refetch
+  }=DynamicFetch("project","category",activeCategory,"")
 
-  const router = useRouter();
-
-  // Intersection Observer দিয়ে auto load
-  const loadMoreRef = useRef(null);
-  const [hoveredId, setHoveredId] = useState(null);
-   const [activeCategory, setActiveCategory] = useState("All");
-   const [filteredData, setFilteredData] = useState([]);
-   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    if (!hasNextPage || isFetchingNextPage) return;
-
+    if (!loadMoreRef.current) return;
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
       },
-      { rootMargin: "200px" } // viewport এ আসার আগেই load হবে
-    );
-
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
-    }
-
-    return () => {
-      if (loadMoreRef.current) {
-        observer.unobserve(loadMoreRef.current);
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
       }
-    };
+    );
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
  useEffect(()=>{
-     const filtered = (data?.pages.flatMap((p) => p.data) || []).filter(
-    (p) => activeCategory === "All" || p.category === activeCategory
-    );
-    const categories = [...new Set(data?.pages.flatMap((p) => p.data.map((p) => p.category)))];
-    setFilteredData(filtered);
-    setCategories(categories);
+     const filtered = data?.pages?.flatMap((page) => page?.data) || []
+     setFilteredData(filtered);
  },[activeCategory,data]) 
 
 
-  if (status === "loading") return <p className="text-center">Loading...</p>;
-  if (status === "error")
-    return <p className="text-center text-red-600">Error loading projects.</p>;
+ if (status === 'pending')
+    return (
+      <Loader type={"projects"}></Loader>
+    );
+
+  if (status === "error") return (
+      <ErrorCard type={"projects"} refetch={refetch}></ErrorCard>
+  );
 
   // ✅ JSON-LD Structured Data
   const projectJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    itemListElement: projects.map((p, index) => ({
+    itemListElement: (data?.pages.flatMap((p) => p.data) || []).map((p, index) => ({
       "@type": "CreativeWork",
       position: index + 1,
       name: p.title,
-      image: p.img,
-      datePublished: p.date,
+      image: p.imageUrl,
+      datePublished: new Date(p.date).toLocaleString(),
       about: p.category,
-      url: `https://yourdomain.com/Projects/${p.id}`,
+      url: `https://sazin.com.bd/Projects/${p._id}`,
       author: {
         "@type": "Organization",
-        name: "Your Company Name",
+        name: "sazin construction ltd",
       },
     })),
   };
@@ -127,7 +104,7 @@ export default function ProjectShowcaseInfinity() {
         />
         <meta property="og:image" content="/default-project-thumbnail.jpg" />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="https://yourdomain.com/projects" />
+        <link rel="canonical" href="https://sazin.com.bd/projects" />
         <Script
           type="application/ld+json"
           strategy="lazyOnload"
@@ -149,36 +126,36 @@ export default function ProjectShowcaseInfinity() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {filteredData.map((p) => (
               <div
-                key={p.id}
-                onPointerEnter={() => setHoveredId(p.id)}
-                onPointerDown={() => setHoveredId(p.id)}
-                onPointerUp={() => setHoveredId(p.id)}
-                onPointerLeave={() => setHoveredId(p.id)} // 👉 phone এ কাজ করবে
-                onPointerMove={() => setHoveredId(p.id)} // 👉 phone এ কাজ করবে
+                key={p._id}
+                onPointerEnter={() => setHoveredId(p._id)}
+                onPointerDown={() => setHoveredId(p._id)}
+                onPointerUp={() => setHoveredId(p._id)}
+                onPointerLeave={() => setHoveredId(p._id)} // 👉 phone এ কাজ করবে
+                onPointerMove={() => setHoveredId(p._id)} // 👉 phone এ কাজ করবে
                 onPointerOut={() => setHoveredId(null)} // 👉 phone এ কাজ করবে
                 className="relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition group"
               >
                 <Image
-                  src={p.img}
-                  alt={p.title}
+                  src={p?.imageUrl}
+                  alt={p?.title}
                   width={600}
                   height={400}
                   className="w-full h-60 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div
                   className={`absolute inset-0 bg-black/70 flex flex-col items-center justify-center transition duration-500 ${
-                    hoveredId === p.id ? "opacity-100" : "opacity-0"
+                    hoveredId === p._id ? "opacity-100" : "opacity-0"
                   }`}
                 >
                   <span className="text-white text-lg font-semibold">
                     {p.title}
                   </span>
                   <p className="text-sm text-white mb-3">
-                    {p.category} · {p.date}
+                    {p.category} · {new Date(p.date).toLocaleString()}
                   </p>
                   <button
                     aria-label={`View details of ${p.title}`}
-                    onClick={() => router.push(`/Projects/${p.id}`)}
+                    onClick={() => router.push(`/Projects/${p._id}`)}
                     className="px-3 cursor-pointer py-1.5 bg-red-600 text-white rounded-md hover:bg-red-900 hover:text-white transition"
                   >
                     View Project
