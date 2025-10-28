@@ -18,4 +18,4 @@ if(!category){
   )
 }
 
-export default page
+export default Page
