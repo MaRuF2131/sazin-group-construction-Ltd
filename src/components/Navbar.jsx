@@ -159,8 +159,8 @@ export default function Navbar() {
   return (
     <>
       <motion.nav
-        className={`bg-transparent  fixed w-full  top-0 z-[9999] transition-all duration-300 ${
-          isScrolled ? "shadow-lg py-2 dark:text-white text-black" : "py-2 text-white"
+        className={`  fixed w-full  top-0 z-[9999] transition-all duration-300 ${
+          isScrolled ? "bg-neutral-50 dark:bg-neutral-950 shadow-lg py-2 dark:text-white text-black" : "bg-transparent py-2 text-white"
         }`}
       >
         <div className="w-full max-w-[100rem] mx-auto px-4 flex justify-between items-center">
