@@ -23,11 +23,11 @@ export const metadata = {
   openGraph: {
     title: 'Sazin Construction Ltd',
     description: 'Leading construction & engineering solutions in Bangladesh.',
-    url: 'https://www.yourdomain.com',
+    url: 'https://sazin.com.bd/',
     type: 'website',
     images: [
       {
-        url: 'https://www.yourdomain.com/og-image.jpg',
+        url: 'https://sazin.com.bd/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Sazin Construction Ltd',
@@ -38,7 +38,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Sazin Construction Ltd',
     description: 'Leading construction & engineering solutions in Bangladesh.',
-    images: ['https://www.yourdomain.com/og-image.jpg'],
+    images: ['https://sazin.com.bd/og-image.jpg'],
   },
 };
 
@@ -65,15 +65,15 @@ export default function RootLayout({ children }) {
                 "@context": "https://schema.org",
                 "@type": "Organization",
                 "name": "Sazin Construction Ltd",
-                "url": "https://www.yourdomain.com",
-                "logo": "https://www.yourdomain.com/logo.png",
+                "url": "https://sazin.com.bd/",
+                "logo": "https://sazin.com.bd/logo.png",
                 "sameAs": [
                   "https://www.facebook.com/yourpage",
                   "https://www.linkedin.com/company/yourcompany"
                 ],
                 "contactPoint": {
                   "@type": "ContactPoint",
-                  "telephone": "+880123456789",
+                  "telephone": "02-58810754",
                   "contactType": "customer service"
                 }
               })

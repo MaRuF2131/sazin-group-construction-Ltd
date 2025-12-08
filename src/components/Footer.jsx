@@ -46,8 +46,8 @@ if (pathname.startsWith('/Product-Base-Services/Agro&Fisheries')) {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Sazin Construction Ltd",
-    url: "https://yourdomain.com",
-    logo: "https://yourdomain.com/logo.png",
+    url: "https://sazin.com.bd",
+    logo: "https://sazin.com.bd/logo.png",
     description:
       "Contractor, Civil Construction, ElectroMechanical Works, Importer & Supplier, Safety Gear, Agro Products, and EPC Projects.",
     address: {
@@ -67,7 +67,7 @@ if (pathname.startsWith('/Product-Base-Services/Agro&Fisheries')) {
     ],
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+880-1234-567890",
+      telephone: "02-58810754",
       contactType: "customer service",
       areaServed: "BD",
       availableLanguage: ["en", "bn"],
@@ -106,7 +106,7 @@ if (pathname.startsWith('/Product-Base-Services/Agro&Fisheries')) {
                 { icon: <FaWhatsapp />, link: "#" },
                 { icon: <FaFacebookF />, link: "#" },
                 { icon: <FaTwitter />, link: "#" },
-                { icon: <FaGoogle />, link: "sazin.engineering@gmail.com" },
+                { icon: <FaGoogle />, link: "mailto:sazin.engineering@gmail.com" },
                 { icon: <FaLinkedinIn />, link: "#" },
                 { icon: <FaPinterestP />, link: "#" },
                 { icon: <FaYoutube />, link: "#" },
@@ -170,7 +170,7 @@ if (pathname.startsWith('/Product-Base-Services/Agro&Fisheries')) {
           <ul className="mt-2 space-y-2 dark:text-gray-400 text-black">
             <li><Link href="/" className={`${theme[0]?.hover} transition-colors`}>Sazin Construction Ltd</Link></li>
             <li><Link href="/Product-Base-Services/Agro&Fisheries"  className={`${theme[0]?.hover} transition-colors`}>Sazin Agro & Fisheries</Link></li>
-            <li><Link href="/Product-Base-Services/Sky-Helmet&Safety-Accessories"  className={`${theme[0]?.hover} transition-colors`}>Sky Helmet & Safety</Link></li>
+            <li><Link href="/Product-Base-Services/Revvo&Safety"  className={`${theme[0]?.hover} transition-colors`}>Sky Helmet & Safety</Link></li>
           </ul>
         </div>
       </div>

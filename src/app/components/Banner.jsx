@@ -35,7 +35,7 @@ const slides = [
     desc: 'Providing premium helmets and safety equipment for every need.',
     buttonText: 'Shop Now',
     buttonColor: 'bg-red-600 text-white hover:bg-white hover:text-red-600',
-    path:'/Product-Base-Services/Sky-Helmet&Safety-Accessories'
+    path:'/Product-Base-Services/Revvo&Safety'
   },
 ];
 

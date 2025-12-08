@@ -14,17 +14,17 @@ export const metadata = {
   description:
     "Discover the journey of Sazin Construction Ltd. from its founding in 2007 to becoming a trusted name in civil, electro-mechanical, and EPC projects in Bangladesh.",
   alternates: {
-    canonical: "https://www.yourdomain.com/detailed-history",
+    canonical: "https://sazin.com.bd/history",
   },
   openGraph: {
     title: "Sazin Construction Ltd. | Detailed Company History",
     description:
       "Explore the journey and milestones of Sazin Construction Ltd., a leader in civil, electro-mechanical, and EPC projects in Bangladesh.",
-    url: "https://www.yourdomain.com/detailed-history",
+        url: "https://sazin.com.bd/history",
     type: "website",
     images: [
       {
-        url: "https://www.yourdomain.com/og-history.jpg",
+        url: "https://sazin.com.bd/og-history.jpg",
         width: 1200,
         height: 630,
         alt: "Sazin Construction Ltd. History",
@@ -36,7 +36,7 @@ export const metadata = {
     title: "Sazin Construction Ltd. | Detailed Company History",
     description:
       "Discover the journey of Sazin Construction Ltd., a trusted name in civil, electro-mechanical, and EPC projects.",
-    images: ["https://www.yourdomain.com/og-history.jpg"],
+    images: ["https://sazin.com.bd/og-history.jpg"],
   },
 };
 
@@ -82,8 +82,8 @@ export default function DetailedHistoryPage() {
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "Sazin Construction Ltd.",
-            "url": "https://www.yourdomain.com",
-            "logo": "https://www.yourdomain.com/logo.png",
+            "url": "https://sazin.com.bd/",
+            "logo": "https://sazin.com.bd/logo.png",
             "sameAs": [
               "https://www.facebook.com/yourpage",
               "https://www.linkedin.com/company/yourcompany"

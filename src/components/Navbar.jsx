@@ -81,7 +81,7 @@ export default function Navbar() {
       },
       {
         name: "Revvo Helmet & Safety Accessories",
-        href: "/Product-Base-Services/Sky-Helmet&Safety-Accessories",
+        href: "/Product-Base-Services/Revvo&Safety",
         prefetch: false,
       },
     ],

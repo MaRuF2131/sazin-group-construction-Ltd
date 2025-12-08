@@ -9,7 +9,7 @@ export default function Page() {
     <>
       {/* ✅ SEO Meta Tags */}
       <Head>
-        <title>Our Projects | Company Name</title>
+        <title>Our Projects | Sazin construction Ltd</title>
         <meta
           name="description"
           content="Explore our latest projects in web development, design, and technology. See case studies and portfolio highlights."
@@ -25,7 +25,7 @@ export default function Page() {
         />
         <meta property="og:image" content="/default-project-thumbnail.jpg" />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="https://sazin.com.bd/projects" />
+        <link rel="canonical" href="https://sazin.com.bd/Projects" />
       </Head>
 
 

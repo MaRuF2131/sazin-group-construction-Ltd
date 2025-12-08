@@ -1,5 +1,7 @@
 // components/Contact.jsx
 "use client";
+import axiosInstance from "@/utils/axios";
+import Image from "next/image";
 import { useState } from "react";
 import {
   FaEnvelope,
@@ -14,17 +16,47 @@ import {
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-
+  const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(form);
-    alert("Message Sent!");
-    setForm({ name: "", email: "", message: "" });
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  // Simple validation
+  if (form.name.length < 3) {
+    alert("Name must be at least 3 characters.");
+    return;
+  }
+  if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+    alert("Enter a valid email.");
+    return;
+  }
+  if (form.message.length < 10) {
+    alert("Message must be at least 10 characters.");
+    return;
+  }
+
+  // Send to backend
+  try {
+    setLoading(true);
+    const res = await axiosInstance.post("/mail/contact", form);
+    const data = await res.data;
+    if (res.status === 200) {
+      alert("Message sent successfully!");
+      setForm({ name: "", email: "", message: "" });
+    } else {
+      alert(`Error: ${data.message}`);
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong!");
+  }
+  finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="bg-gray-50 dark:bg-gray-950 min-h-screen flex items-center justify-center md:p-6 p-1 transition-colors duration-300">
@@ -81,19 +113,22 @@ export default function Contact() {
 
             <button
               type="submit"
-              className="bg-red-500 text-white px-6 py-2 rounded-lg border border-red-600 hover:bg-white hover:text-red-600 transition"
+              className="bg-red-500 cursor-pointer text-white px-6 py-2 rounded-lg border border-red-600 hover:bg-white hover:text-red-600 transition"
             >
-              Send Message
+              {loading ? "Sending..." : "Send Message"}
             </button>
           </form>
         </div>
 
         {/* Right Side - Info */}
         <div className="flex flex-col items-center justify-center space-y-6">
-          <img
+          <Image
+            width={500}
+            height={300}
             src="https://i.ibb.co/29pmXPP/download.jpg"
             alt="Contact Illustration"
             className="w-full max-w-md rounded-xl"
+            
           />
 
           <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-sm w-full space-y-4 transition-colors duration-300">
@@ -127,19 +162,19 @@ export default function Contact() {
 
             {/* Social Icons */}
             <div className="mt-8 flex justify-right gap-4 text-xl">
-              <a href="#" className="hover:text-red-600 dark:text-gray-300 transition-colors">
+              <a href="#" className="hover:text-red-600 cursor-not-allowed dark:text-gray-300 transition-colors">
                 <FaFacebookF />
               </a>
-              <a href="#" className="hover:text-red-600 dark:text-gray-300 transition-colors">
+              <a href="#" className="hover:text-red-600 cursor-not-allowed  dark:text-gray-300 transition-colors">
                 <FaTwitter />
               </a>
-              <a href="#" className="hover:text-red-600 dark:text-gray-300 transition-colors">
+              <a target="blank" href="mailto:sazin.engineering@gmail.com" className="hover:text-red-600  dark:text-gray-300 transition-colors">
                 <FaGoogle />
               </a>
-              <a href="#" className="hover:text-red-600 dark:text-gray-300 transition-colors">
+              <a href="#" className="hover:text-red-600 cursor-not-allowed dark:text-gray-300 transition-colors">
                 <FaLinkedinIn />
               </a>
-              <a href="#" className="hover:text-red-600 dark:text-gray-300 transition-colors">
+              <a href="#" className="hover:text-red-600 cursor-not-allowed dark:text-gray-300 transition-colors">
                 <FaYoutube />
               </a>
             </div>

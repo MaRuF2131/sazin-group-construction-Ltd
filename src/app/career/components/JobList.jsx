@@ -41,7 +41,7 @@ const loadMoreRef = useRef();
 
     useEffect(()=>{
      if(data){
-       const value=data?.pages?.flatMap((page) => page?.data).slice(0,4) || [];
+       const value=data?.pages?.flatMap((page) => page?.data) || [];
        setjobs(value)
      } 
   },[data])
@@ -58,7 +58,7 @@ const loadMoreRef = useRef();
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {jobs.map((job) => (
-        <JobCard key={job.id} job={job} onApply={setSelectedJob} />
+        <JobCard key={job._id} job={job} onApply={setSelectedJob} />
       ))}
 
       {selectedJob && (

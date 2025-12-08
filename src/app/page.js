@@ -4,7 +4,6 @@ import Script from "next/script";
 import StatsSection from "./components/StatsSection";
 
 // Lazy load below-the-fold with SSR true
-const AboutSnapet=dynamic(()=>import('./components/AboutSnapet'),{ssr:true})
 const Banner=dynamic(()=>import('./components/Banner'),{ssr:true})
 const Services=dynamic(()=>import('./components/Service'),{ssr:true})
 const FeatureProducts=dynamic(()=>import('./components/FeatureProducts'),{ssr:true})
@@ -23,13 +22,13 @@ export default function Home() {
       <Head>
         <title>Intelligent Engineering | Home</title>
         <meta name="description" content="Intelligent Engineering provides top-quality construction, industrial, and safety solutions in Bangladesh. Explore our projects, products, and services." />
-        <link rel="canonical" href="https://www.yourdomain.com/" />
+        <link rel="canonical" href="https://sazin.com.bd/" />
 
         {/* Open Graph */}
         <meta property="og:title" content="Intelligent Engineering | Home" />
         <meta property="og:description" content="Top-quality construction, industrial, and safety solutions in Bangladesh." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.yourdomain.com/" />
+        <meta property="og:url" content="https://sazin.com.bd/" />
         <meta property="og:image" content="/og-image.jpg" />
 
         {/* Twitter Card */}
@@ -43,11 +42,9 @@ export default function Home() {
         {/* Above-the-fold */}
         <Banner />
         <FeatureProducts />
-        {/* <AboutSnapet /> */}
-        <Services />
-
         {/* Below-the-fold lazy-loaded */}
         <Projects />
+        <Services />
         <Equipments />
         <Clients />
         <Certificates />
@@ -67,15 +64,15 @@ export default function Home() {
           "@context": "https://schema.org",
           "@type": "Organization",
           "name": "Intelligent Engineering",
-          "url": "https://www.yourdomain.com/",
-          "logo": "https://www.yourdomain.com/logo.png",
+          "url": "https://sazin.com.bd/",
+          "logo": "https://sazin.com.bd/logo.png",
           "sameAs": [
             "https://www.facebook.com/yourpage",
             "https://www.linkedin.com/company/yourcompany"
           ],
           "contactPoint": {
             "@type": "ContactPoint",
-            "telephone": "+880123456789",
+            "telephone": "02-58810754",
             "contactType": "customer service"
           }
         })}

@@ -5,7 +5,7 @@ const leaders = [
     bio: `Afroza Pervin is an accomplished business leader with more than 15 years of experience in guiding organizational growth and development. Known for her modest personality and strong educational background, she brings a thoughtful and insightful approach to business leadership.
          Her strengths include exceptional communication skills, a deep understanding of corporate culture, and the ability to create a productive and positive work environment. Under her leadership, Sazin Construction Ltd. maintains a culture that supports efficiency, professionalism, and sustainable business expansion. Her strategic focus on new business development drives the company toward continuous improvement and long-term success.
         `,
-    img: "/farjana.jpeg",
+    img: "/manicon.png",
   },
   {
     name: "Md. Shahadut Hossain",
@@ -21,7 +21,7 @@ const leaders = [
     bio: `Engr. R.K. Azad is a highly skilled electrical and electromechanical engineering professional, holding his B.Sc. in Electrical & Electronic Engineering from RUET, one of Bangladesh’s leading engineering institutions.
           He has extensive experience in managing and executing complex electromechanical projects across both government and private sectors. With strong engineering expertise, project management capability, and leadership qualities, he contributes significantly to the successful delivery of the company’s technical and infrastructure projects. His commitment to quality and innovation strengthens the technical backbone of Sazin Construction Ltd.
          `,
-    img: "/Hossain.avif",
+    img: "/manicon.png",
   },
   {
     name: "Engr. Sabbir Ahmed, BSc (IPE), MBA, CSCA",
@@ -30,7 +30,7 @@ const leaders = [
           He has led major operational improvements, executed detailed feasibility studies, and supported business expansion across sectors including manufacturing, smart technology, energy, agro-industry, and industrial solutions. His strengths include building strategic partnerships, identifying new market opportunities, and guiding projects that enhance long-term value for the organization.
           As Director of Business Development, Sabbir plays a key role in shaping the company’s growth strategy and supporting its continued expansion into new and emerging markets.
           `,
-    img: "/Hossain.avif",
+    img: "/sabbir.jpeg",
   },
 ];
 

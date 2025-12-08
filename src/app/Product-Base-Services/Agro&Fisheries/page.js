@@ -35,7 +35,7 @@ export const agroData = {
     "/pont6.jpeg",
   ],
   addressLine: "WF2H+M49, Unnamed Road",
-  phone: "+88-02-58810754",
+  phone: "02-58810754",
   email: "sazin.engineering@gmail.com",
   mapEmbedSrc:
     "https://maps.google.com/maps?q=DOHS%20Mohakhali,%20Dhaka&t=&z=15&ie=UTF8&iwloc=&output=embed",

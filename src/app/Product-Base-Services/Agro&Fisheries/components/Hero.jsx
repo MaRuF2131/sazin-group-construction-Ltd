@@ -5,7 +5,7 @@ import React from "react";
 export default function Hero({ data }) {
   return (
     <section
-      className="relative -mt-25 w-full bg-cover bg-center min-h-[70vh] md:min-h-[80vh] lg:min-h-[100vh] flex items-center"
+      className="relative -mt-25 pt-25 md:pt-0 w-full bg-cover bg-center min-h-[80vh] md:min-h-[90vh] lg:min-h-[100vh] flex items-center"
       style={{
         backgroundImage: `linear-gradient(rgba(2,6,23,0.45), rgba(2,6,23,0.25)), url(${data.heroImage})`,
       }}
@@ -21,7 +21,7 @@ export default function Hero({ data }) {
                 <path d="M8 12a4 4 0 018 0" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <h4 className="text-lg md:text-xl font-semibold">{data.name}</h4>
+            <h4 className="text-base md:text-xl font-semibold">{data.name}</h4>
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4">

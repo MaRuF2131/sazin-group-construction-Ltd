@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 const projects = [
@@ -40,13 +41,13 @@ export default function ProjectsShowcase() {
       </div>
 
       <div className="mt-8 text-center">
-        <a
-          href="/projects"
+        <Link
+          href="/Projects"
           className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg text-white font-semibold transition-colors"
         >
           View All Projects
           <FaExternalLinkAlt />
-        </a>
+        </Link>
       </div>
     </section>
   );

@@ -9,8 +9,8 @@ const Logo = () => {
     if(pathname.startsWith('/Product-Base-Services/Agro&Fisheries')){
         setPath('/Product-Base-Services/Agro&Fisheries')
     }
-    else if(pathname.startsWith('/Product-Base-Services/Sky-Helmet&Safety-Accessories')){
-        setPath('/Product-Base-Services/Sky-Helmet&Safety-Accessories')
+    else if(pathname.startsWith('/Product-Base-Services/Revvo&Safety')){
+        setPath('/Product-Base-Services/Revvo&Safety')
     }
      else if(pathname.startsWith('/')){
        setPath('/')
@@ -204,7 +204,7 @@ if(path=='/') return(
 
   ) 
 
-  if(path=='/Product-Base-Services/Sky-Helmet&Safety-Accessories')
+  if(path=='/Product-Base-Services/Revvo&Safety')
     return(
 
       <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" className="w-fit h-[55px]" viewBox="0 0 258.93 300.03">

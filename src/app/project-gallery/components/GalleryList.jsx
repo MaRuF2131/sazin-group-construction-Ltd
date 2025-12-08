@@ -17,7 +17,7 @@ export default function GalleryList() {
   const [hoveredId, setHoveredId] = useState(null);
   const [currentIndex,setCurrentIndex]=useState(null)
 
- const categories=["Civil","Electro","Engineering-Procurement","Safe&Security","NHA","PGCB","PWD","Agro"];
+ const categories=["Civil","Electro","Engineering-Procurement","Safe&Security","NHA","PGCB","PWD","BPC", "EED", "LGED","Agro"];
 
    const  {
     data,
