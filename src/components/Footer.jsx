@@ -170,6 +170,7 @@ if (pathname.startsWith('/Product-Base-Services/Agro&Fisheries')) {
           <ul className="mt-2 space-y-2 dark:text-gray-400 text-black">
             <li><Link href="/" className={`${theme[0]?.hover} transition-colors`}>Sazin Construction Ltd</Link></li>
             <li><Link href="/Product-Base-Services/Agro&Fisheries"  className={`${theme[0]?.hover} transition-colors`}>Sazin Agro & Fisheries</Link></li>
+            <li><Link href="/sazin-valves"  className={`${theme[0]?.hover} transition-colors`}>Sazin Valves & Fittings</Link></li>
             <li><Link href="/Product-Base-Services/Revvo&Safety"  className={`${theme[0]?.hover} transition-colors`}>Sky Helmet & Safety</Link></li>
           </ul>
         </div>

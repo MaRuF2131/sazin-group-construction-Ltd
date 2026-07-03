@@ -24,11 +24,12 @@
     "react-dom": "^19.2.1",
     "react-hook-form": "^7.62.0",
     "react-icons": "^5.5.0",
-    "swiper": "^11.2.10"
+    "swiper": "^14.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "baseline-browser-mapping": "^2.10.40",
     "eslint": "^9",
     "eslint-config-next": "15.5.0",
     "tailwindcss": "^4"
