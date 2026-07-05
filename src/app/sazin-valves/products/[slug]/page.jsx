@@ -1,25 +1,63 @@
-import { notFound } from 'next/navigation';
+"use client"; // ডাটা ফেচ করতে হলে এটি "use client" থাকতে হবেই
+import { useState, useEffect } from "react";
+import { notFound,useParams } from 'next/navigation';
 import Link from 'next/link';
 import { products } from '../../lib/data';
 import SpecTable from '../../components/SpecTable';
 import ProductCard from '../../components/ProductCard';
 
-export async function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
-}
 
-export async function generateMetadata({ params }) {
+/* export async function generateMetadata({ params }) {
   const { slug } = await params;
   const product = products.find((p) => p.slug === slug);
   return { title: product ? `${product.name} — SAZIN Valves` : 'Not Found' };
-}
+} */
 
-export default async function ProductDetailPage({ params }) {
-  const { slug } = await params;
-  const product = products.find((p) => p.slug === slug);
-  if (!product) notFound();
+export default  function ProductDetailPage() {
+  const { slug } =  useParams(); // ডাইনামিক রাউট থেকে স্লাগ বের করা হচ্ছে
 
-  const related = products.filter((p) => p.id !== product.id).slice(0, 3);
+    const [product, setProduct] = useState([]); 
+    const [related, setRelated] = useState([]);
+    const [isLoading, setIsLoading] = useState(true); 
+    
+useEffect(() => {
+  const fetchProduct = async () => {
+    console.log("slug",slug);
+    try {
+      const res = await fetch(
+        `https://sazin-group-construction-ltd-backen-iota.vercel.app/userAction/sazin-valves/get-valve/${slug}`
+      );
+
+      if (res.status === 200) {
+        const data = await res.json();
+
+        setProduct(data);
+
+        // -----------------------------
+        // Related Product Fetch
+        // -----------------------------
+        if (data?.category) {
+          const relatedRes = await fetch(
+            `https://sazin-group-construction-ltd-backen-iota.vercel.app/userAction/sazin-valves/get-valves?category=${encodeURIComponent(
+              data.category
+            )}&limit=3`
+          );
+
+          if (relatedRes.status===200) {
+            const relatedData = await relatedRes.json();
+            setRelated(relatedData?.data);
+          }
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  fetchProduct();
+}, [slug]);
 
   const sizeSpec = product.specs?.find((s) => s.label === 'Size Range');
   const pressureSpec = product.specs?.find((s) => s.label === 'Pressure Rating');
@@ -27,6 +65,20 @@ export default async function ProductDetailPage({ params }) {
   const connSpec = product.specs?.find((s) => s.label === 'Connection');
   const operationSpec = product.specs?.find((s) => s.label === 'Operation');
   const quickSpecs = [sizeSpec, pressureSpec, tempSpec, connSpec, operationSpec].filter(Boolean);
+
+  if (isLoading) {
+        return (
+          <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-brand-900 via-brand-700 to-brand-800">
+            <div className="animate-pulse flex flex-col items-center gap-3">
+              <div className="w-48 h-4 bg-white/20 rounded-full" />
+              <span className="text-white/50 text-sm font-medium">Loading...</span>
+            </div>
+          </div>
+          );
+      }
+    
+      // ডাটা পেলে না থাকলেই এটি স্ট্যাটিক ডাটা দেখাবে
+      if (!product) return null;
 
   return (
     <div className=" min-h-screen">
@@ -130,8 +182,8 @@ export default async function ProductDetailPage({ params }) {
 
                 {/* Main Product Emoji Area */}
                 <div className="aspect-[4/3] lg:aspect-square flex items-center justify-center relative z-10">
-                  <span className="text-[120px] sm:text-[150px] lg:text-[180px] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] transition-transform duration-700 group-hover:scale-105 select-none">
-                    {product.emoji}
+                  <span className="text-[120px] p-4 sm:text-[150px] lg:text-[180px] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] transition-transform duration-700 group-hover:scale-105 select-none">
+                    <img className='w-full h-full object-cover' src={product?.imageUrl} alt={product.name} />
                   </span>
                 </div>
               </div>
@@ -139,7 +191,7 @@ export default async function ProductDetailPage({ params }) {
               {/* Quick specs strip below image */}
               <div className="grid grid-cols-5 bg-brand-900 border-x border-b border-brand-800">
                 {quickSpecs.map((spec, i) => (
-                  <div key={spec.label} className={`p-3 lg:p-4 text-center ${i < quickSpecs.length - 1 ? 'border-r border-brand-800' : ''}`}>
+                  <div key={i} className={`p-3 lg:p-4 text-center ${i < quickSpecs.length - 1 ? 'border-r border-brand-800' : ''}`}>
                     <div className="text-[9px] text-brand-400 uppercase tracking-[0.15em] font-medium mb-1 truncate">
                       {spec.label}
                     </div>
@@ -156,12 +208,12 @@ export default async function ProductDetailPage({ params }) {
               <div className="inline-flex items-center gap-2 bg-gray-50 border border-gray-200 px-3.5 py-1.5 mb-5">
                 <div className="w-1.5 h-1.5 bg-accent-500 rounded-full" />
                 <span className="text-[11px] text-gray-500 font-semibold tracking-[0.15em] uppercase">
-                  {product.category.replace(/-/g, ' ')}
+                  {product?.category?.replace(/-/g, ' ')}
                 </span>
               </div>
 
               <h1 className="font-heading text-3xl sm:text-4xl lg:text-[42px] font-bold text-brand-900 leading-[1.1] mb-5 tracking-tight">
-                {product.name}
+                {product?.name}
               </h1>
 
               <div className="flex items-center gap-3 mb-6">
@@ -183,7 +235,7 @@ export default async function ProductDetailPage({ params }) {
               <p className="text-gray-500 leading-[1.8] text-[14px] mb-7">{product.description}</p>
 
               <div className="flex flex-wrap gap-2 mb-7">
-                {product.compliance?.map((c) => (
+                {product?.compliance?.map((c) => (
                   <span key={c} className="inline-flex items-center gap-1.5 bg-brand-50 text-brand-700 text-[11px] font-semibold px-3 py-1.5 border border-brand-100">
                     <svg className="w-3 h-3 text-accent-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
                     {c}
@@ -247,14 +299,14 @@ export default async function ProductDetailPage({ params }) {
 
           {/* Two columns */}
           <div className="grid lg:grid-cols-2 gap-10 mb-16">
-            {product.applications?.length > 0 && (
+            {product?.applications?.length > 0 && (
               <div>
                 <div className="flex items-center gap-3 mb-5">
                   <div className="w-8 h-8 bg-brand-700 flex items-center justify-center text-white text-xs font-bold">02</div>
                   <h3 className="font-heading text-xl font-semibold text-brand-900">Applications</h3>
                 </div>
                 <div className="space-y-2.5">
-                  {product.applications.map((app, i) => (
+                  {product?.applications.map((app, i) => (
                     <div key={app} className="flex items-center gap-4  p-4 border border-gray-100 hover:border-accent-400/50 hover:shadow-sm transition-all duration-200 group">
                       <div className="w-7 h-7 bg-accent-50 text-accent-600 flex items-center justify-center text-[11px] font-bold shrink-0 group-hover:bg-accent-500 group-hover:text-white transition-colors">
                         {String(i + 1).padStart(2, '0')}
@@ -272,7 +324,7 @@ export default async function ProductDetailPage({ params }) {
                 <h3 className="font-heading text-xl font-semibold text-brand-900">Key Materials</h3>
               </div>
               <div className="space-y-2.5">
-                {product.specs
+                {product?.specs
                   .filter((s) => ['Body', 'Disc', 'Seat', 'Stem', 'Diaphragm / Seal', 'Internal Trim', 'Screen', 'Gate (Wedge)'].includes(s.label))
                   .map((mat) => (
                     <div key={mat.label} className="flex items-center justify-between  p-4 border border-gray-100 hover:border-accent-400/50 hover:shadow-sm transition-all duration-200">
@@ -285,7 +337,7 @@ export default async function ProductDetailPage({ params }) {
           </div>
 
           {/* Compliance Banner */}
-          {product.compliance?.length > 0 && (
+          {product?.compliance?.length > 0 && (
             <div className="relative overflow-hidden bg-gradient-to-r from-brand-800 via-brand-700 to-brand-800 p-8 sm:p-10 lg:p-12">
               <div className="absolute inset-0 opacity-5" style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
@@ -298,7 +350,7 @@ export default async function ProductDetailPage({ params }) {
                   <h3 className="font-heading text-xl font-semibold text-white">Compliance & Certification</h3>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  {product.compliance.map((c) => (
+                  {product?.compliance?.map((c) => (
                     <div key={c} className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm text-white text-sm font-medium px-5 py-3 border border-white/[0.12]">
                       <svg className="w-4 h-4 text-accent-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
                       {c}
@@ -330,7 +382,7 @@ export default async function ProductDetailPage({ params }) {
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((p) => (
-                <ProductCard key={p.id} product={p} />
+                <ProductCard key={p._id} product={p} />
               ))}
             </div>
           </div>

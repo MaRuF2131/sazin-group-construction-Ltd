@@ -1,6 +1,51 @@
-import { aboutData } from '../lib/data';
-
+"use client"; // ডাটা ফেচ করতে হলে এটি "use client" থাকতে হবেই
+import { aboutData as staticAboutData } from '../lib/data'
+import { useState, useEffect } from "react";
 export default function AboutSection() {
+    const [aboutData, setAboutData] = useState(null); 
+    const [isLoading, setIsLoading] = useState(true); 
+  
+    useEffect(() => {
+      const fetchAbout = async () => {
+        try {
+          // ব্যাকএন্ডে থেকে ডাটা আনার চেষ্ট করা হচ্যেছে
+          const res = await fetch('https://sazin-group-construction-ltd-backen-iota.vercel.app/userAction/sazin-valves/get-about');
+          
+          if (res.status === 200) {
+            const data = await res.json();
+            console.log("res about",data);
+            setAboutData(data?.data); // সফল হলে API এর ডাটা দিয়ে যাবে
+          } else {
+            // এররর হলে বা ডাউন হলে স্ট্যাটিক ডাটা দেখাবে
+            setAboutData(staticAboutData); 
+          }
+        } catch (error) {
+          console.error('Error fetching about data:', error);
+          setAboutData(staticAboutData); // ডিফলট ডাটা দেখানো হবে
+        } finally {
+          setIsLoading(false); 
+          // লোডিং শেষ হওয়েছে নিচের UI দেখাবে
+        }
+      };
+  
+      fetchAbout();
+    }, []); // এই ফাক্লের কথাও দিলে শুধু একবার পেজ লোড হওয়ার সময়েই রাখলে একবার কলে দিলে একবার কলে দেওয়া না (Array dependency না দেওয়ারই করে একবার একবার ডেটা আসবে)
+  
+    // ডাটা आसले ना थाकले लोडिंग देखानोर जन्य एकटि फलब्याक देओया याते इউजारके "Loading..." देखाबे
+  
+    if (isLoading) {
+      return (
+        <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-brand-900 via-brand-700 to-brand-800">
+          <div className="animate-pulse flex flex-col items-center gap-3">
+            <div className="w-48 h-4 bg-white/20 rounded-full" />
+            <span className="text-white/50 text-sm font-medium">Loading...</span>
+          </div>
+        </div>
+        );
+    }
+  
+    // ডাটা পেলে না থাকলেই এটি স্ট্যাটিক ডাটা দেখাবে
+    if (!aboutData) return null;
   return (
     <section id="about" className="">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -11,10 +56,10 @@ export default function AboutSection() {
               Who We Are
             </span>
             <h2 className="font-heading dark:text-white text-3xl sm:text-4xl font-bold text-brand-700 mt-2 mb-6">
-              {aboutData.title}
+              {aboutData?.title}
             </h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-8 text-[15px]">
-              {aboutData.description}
+              {aboutData?.description}
             </p>
 
             {/* Vision & Mission */}
@@ -23,13 +68,13 @@ export default function AboutSection() {
                 <h4 className="font-heading text-xs font-bold text-brand-700 uppercase tracking-[0.15em] mb-2">
                   Our Vision
                 </h4>
-                <p className="text-sm text-gray-600 dark:text-white leading-relaxed">{aboutData.vision}</p>
+                <p className="text-sm text-gray-600 dark:text-white leading-relaxed">{aboutData?.vision}</p>
               </div>
               <div className="bg-white dark:bg-gray-700 p-6 border-l-4 border-brand-500 shadow-sm">
                 <h4 className="font-heading text-xs font-bold text-brand-700 uppercase tracking-[0.15em] mb-2">
                   Our Mission
                 </h4>
-                <p className="text-sm text-gray-600 dark:text-white leading-relaxed">{aboutData.mission}</p>
+                <p className="text-sm text-gray-600 dark:text-white leading-relaxed">{aboutData?.mission}</p>
               </div>
             </div>
           </div>

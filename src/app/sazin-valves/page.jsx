@@ -1,13 +1,61 @@
+"use client"; // ডাটা ফেচ করতে হলে এটি "use client" থাকতে হবেই
+
+import { useState, useEffect } from "react";
+
 import HeroSection from './components/HeroSection';
 import ProductCard from './components/ProductCard';
 import AboutSection from './components/AboutSection';
 import WhyChooseUs from './components/WhyChooseUs';
-import { products } from './lib/data';
 import Link from 'next/link';
 
 export default function HomePage() {
-  const featured = products.filter((p) => p.featured);
-  const others = products.filter((p) => !p.featured);
+
+      const [featured, setFeatured] = useState([]); 
+      const [others, setOthers] = useState([]); 
+      const [isLoading, setIsLoading] = useState(true); 
+      
+        useEffect(() => {
+          const fetchValves = async () => {
+            try {
+              // ব্যাকএন্ডে থেকে ডাটা আনার চেষ্ট করা হচ্যেছে
+              const res = await fetch('https://sazin-group-construction-ltd-backen-iota.vercel.app/userAction/sazin-valves/get-valves?limit=10');
+              const resfeature = await fetch('https://sazin-group-construction-ltd-backen-iota.vercel.app/userAction/sazin-valves/get-valves?limit=10&featured=true');
+              
+              if (res.status === 200) {
+                const data = await res.json();
+                console.log("res valves",data);
+                setOthers(data?.data || []); // সফল হলে API এর ডাটা দিয়ে যাবে
+              } else {
+
+              }
+              if (resfeature.status === 200) {
+                const data = await resfeature.json();
+                console.log("res feature valves",data);
+                setFeatured(data?.data || []); // সফল হলে API এর ডাটা দিয়ে যাবে
+              }
+            } catch (error) {
+              console.error('Error fetching valves data:', error);
+            } finally {
+              setIsLoading(false); 
+              // লোডিং শেষ হওয়েছে নিচের UI দেখাবে
+            }
+          };
+      
+          fetchValves();
+        }, []);
+
+      if (isLoading) {
+        return (
+          <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-brand-900 via-brand-700 to-brand-800">
+            <div className="animate-pulse flex flex-col items-center gap-3">
+              <div className="w-48 h-4 bg-white/20 rounded-full" />
+              <span className="text-white/50 text-sm font-medium">Loading...</span>
+            </div>
+          </div>
+          );
+      }
+    
+      // ডাটা পেলে না থাকলেই এটি স্ট্যাটিক ডাটা দেখাবে
 
   return (
     <>
@@ -41,7 +89,7 @@ export default function HomePage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
             {featured.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product._id} product={product} />
             ))}
           </div>
         </div>
@@ -56,7 +104,7 @@ export default function HomePage() {
             </h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
               {others.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product._id} product={product} />
               ))}
             </div>
 
@@ -91,7 +139,7 @@ export default function HomePage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href="/products"
+              href="/sazin-valves/products"
               className="bg-accent-500 hover:bg-accent-600 text-white font-semibold px-8 py-3.5 transition-all duration-200 hover:shadow-lg hover:shadow-accent-500/25 text-sm"
             >
               Browse Full Catalog

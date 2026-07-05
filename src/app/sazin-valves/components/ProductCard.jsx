@@ -4,7 +4,7 @@ import Link from 'next/link';
 const ProductCard = React.memo(function ProductCard({ product }) {
   return (
     <Link
-      href={`/sazin-valves/products/${product.slug}`}
+      href={`/sazin-valves/products/${product._id}`}
       className="group block bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl hover:shadow-brand-900/10 hover:-translate-y-1.5 transition-all duration-500 overflow-hidden"
     >
       {/* Image area - টেকনিক্যাল ব্যাকগ্রাউন্ড সহ */}
@@ -18,8 +18,8 @@ const ProductCard = React.memo(function ProductCard({ product }) {
         }} />
 
         {/* ইমোজিতে হালকা শ্যাডো এবং হোভারে জুম ইফেক্ট */}
-        <span className="text-8xl product-img drop-shadow-2xl relative z-10 group-hover:scale-110 transition-transform duration-700 ease-out">
-          {product.emoji}
+        <span className="text-2xl p-4 product-img drop-shadow-2xl relative z-10 group-hover:scale-110 transition-transform duration-700 ease-out">
+          <img className='w-full h-full object-cover' src={product?.imageUrl} alt={product.name} />
         </span>
 
         {/* ফ্রস্টেড গ্লাস "View Details" বাটন */}
@@ -29,7 +29,7 @@ const ProductCard = React.memo(function ProductCard({ product }) {
 
         {/* Featured badge - আরও স্মুথ দেখতে */}
         {product.featured && (
-          <span className="absolute top-4 left-4 bg-gradient-to-r from-accent-500 to-accent-600 text-white text-[10px] font-bold tracking-[0.15em] uppercase px-3 py-1.5 rounded-full shadow-lg shadow-accent-500/30">
+          <span className="absolute z-50 top-4 left-4 bg-gradient-to-r from-accent-500 to-accent-600 text-red-700 text-[10px] font-bold tracking-[0.15em] uppercase px-3 py-1.5 rounded-full shadow-lg shadow-accent-500/30">
             Featured
           </span>
         )}

@@ -1,7 +1,55 @@
+"use client"; // ডাটা ফেচ করতে হলে এটি "use client" থাকতে হবেই
+
+import { useState, useEffect } from "react";
 import Link from 'next/link';
-import { heroData } from '../lib/data';
+
+// ডিফল্ট ডাটা (যদি এপিআই ডাউন হয়ে বা এরর হলে এই ডিফল্ট দেখাবে)
+import { heroData as staticHeroData } from '../lib/data'; 
 
 export default function HeroSection() {
+  const [heroData, setHeroData] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true); 
+
+  useEffect(() => {
+    const fetchHero = async () => {
+      try {
+        // ব্যাকএন্ডে থেকে ডাটা আনার চেষ্ট করা হচ্যেছে
+        const res = await fetch('https://sazin-group-construction-ltd-backen-iota.vercel.app/userAction/sazin-valves/get-hero');
+        
+        if (res.status === 200) {
+          const data = await res.json();
+          setHeroData(data); // সফল হলে API এর ডাটা দিয়ে যাবে
+        } else {
+          // এররর হলে বা ডাউন হলে স্ট্যাটিক ডাটা দেখাবে
+          setHeroData(staticHeroData); 
+        }
+      } catch (error) {
+        console.error('Error fetching hero data:', error);
+        setHeroData(staticHeroData); // ডিফলট ডাটা দেখানো হবে
+      } finally {
+        setIsLoading(false); 
+        // লোডিং শেষ হওয়েছে নিচের UI দেখাবে
+      }
+    };
+
+    fetchHero();
+  }, []); // এই ফাক্লের কথাও দিলে শুধু একবার পেজ লোড হওয়ার সময়েই রাখলে একবার কলে দিলে একবার কলে দেওয়া না (Array dependency না দেওয়ারই করে একবার একবার ডেটা আসবে)
+
+  // ডাটা আসলে না থাকলে লোডিং দেখানোর জন্য একটি ফলব্যাক দেওয়া যাতে ইউজারকে "Loading..." দেখাবে
+
+  if (isLoading) {
+    return (
+      <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-brand-900 via-brand-700 to-brand-800">
+        <div className="animate-pulse flex flex-col items-center gap-3">
+          <div className="w-48 h-4 bg-white/20 rounded-full" />
+          <span className="text-white/50 text-sm font-medium">Loading...</span>
+        </div>
+      </div>
+      );
+  }
+
+  // ডাটা পেলে না থাকলেই এটি স্ট্যাটিক ডাটা দেখাবে
+  if (!heroData) return null;
   return (
     <section className="relative   min-h-[90vh] flex items-center overflow-hidden">
       {/* Background layers */}
@@ -19,27 +67,27 @@ export default function HeroSection() {
           <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-white/20 px-4 py-1.5 mb-8">
             <div className="w-1.5 h-1.5 bg-accent-300 rounded-full animate-pulse" />
             <span className="text-white text-[11px] font-semibold tracking-[0.2em] uppercase">
-              {heroData.badge}
+              {heroData?.badge}
             </span>
           </div>
 
           {/* Title - এটি ইতিমধ্যে white, তাই ঠিক আছে */}
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-tight mb-6">
-            {heroData.title}
+            {heroData?.title}
           </h1>
 
           {/* Subtitle - কালার আরও হালকা করে দেওয়া হয়েছে (brand-200/90 থেকে brand-100 এ নেওয়া হয়েছে) */}
           <p className="text-black text-base font-semibold sm:text-lg leading-relaxed max-w-2xl mb-10">
-            {heroData.subtitle}
+            {heroData?.subtitle}
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-4">
             <Link
               href="/sazin-valves/products"
-              className="inline-flex items-center gap-2 bg-accent-500 hover:bg-accent-400 text-brand-900 font-bold px-8 py-3.5 transition-all duration-200 hover:shadow-lg hover:shadow-accent-500/25 text-sm"
+              className="inline-flex items-center text-black dark:text-white gap-2 bg-accent-500 hover:bg-accent-400 text-brand-900 font-bold px-8 py-3.5 transition-all duration-200 hover:shadow-lg hover:shadow-accent-500/25 text-sm"
             >
-              {heroData.cta}
+              {heroData?.cta}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
@@ -49,7 +97,7 @@ export default function HeroSection() {
           {/* Stats row */}
           {/* ডিভাইডার লাইন স্পষ্ট করার জন্য white/10 থেকে white/20 করা হয়েছে */}
           <div className="flex flex-wrap gap-x-10 gap-y-4 mt-16 pt-8 border-t border-white/20">
-            {heroData.stats.map((stat) => (
+            {heroData?.stats?.map((stat) => (
               <div key={stat.label}>
                 {/* নম্বরগুলো আরও চকচকে করার জন্য accent-400 থেকে accent-300 করা হয়েছে */}
                 <div className="text-accent-300 font-heading text-2xl sm:text-3xl font-bold">

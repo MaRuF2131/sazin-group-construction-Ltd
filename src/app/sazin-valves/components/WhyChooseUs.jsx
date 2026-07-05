@@ -1,6 +1,53 @@
-import { strengths } from '../lib/data';
+"use client"; // ডাটা ফেচ করতে হলে এটি "use client" থাকতে হবেই
+
+import { useState, useEffect } from "react";
+import { strengths as staticstrengths} from '../lib/data';
 
 export default function WhyChooseUs() {
+      const [strengths, setStrengths] = useState([]); 
+      const [isLoading, setIsLoading] = useState(true); 
+    
+      useEffect(() => {
+        const fetchStrengths = async () => {
+          try {
+            // ব্যাকএন্ডে থেকে ডাটা আনার চেষ্ট করা হচ্যেছে
+            const res = await fetch('https://sazin-group-construction-ltd-backen-iota.vercel.app/userAction/sazin-valves/get-strengths');
+            
+            if (res.status === 200) {
+              const data = await res.json();
+              console.log("res strengths",data);
+              setStrengths(data?.strengths || []); // সফল হলে API এর ডাটা দিয়ে যাবে
+            } else {
+              // এররর হলে বা ডাউন হলে স্ট্যাটিক ডাটা দেখাবে
+              setStrengths(staticstrengths); 
+            }
+          } catch (error) {
+            console.error('Error fetching strengths data:', error);
+            setStrengths(staticstrengths); // ডিফলট ডাটা দেখানো হবে
+          } finally {
+            setIsLoading(false); 
+            // লোডিং শেষ হওয়েছে নিচের UI দেখাবে
+          }
+        };
+    
+        fetchStrengths();
+      }, []); // এই ফাক্লের কথাও দিলে শুধু একবার পেজ লোড হওয়ার সময়েই রাখলে একবার কলে দিলে একবার কলে দেওয়া না (Array dependency না দেওয়ারই করে একবার একবার ডেটা আসবে)
+    
+      // ডাটা आसले ना थाकले लोडिंग देखानोर जन्य एकटि फलब्याक देओया याते इউजारके "Loading..." देखाबे
+    
+      if (isLoading) {
+        return (
+          <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-brand-900 via-brand-700 to-brand-800">
+            <div className="animate-pulse flex flex-col items-center gap-3">
+              <div className="w-48 h-4 bg-white/20 rounded-full" />
+              <span className="text-white/50 text-sm font-medium">Loading...</span>
+            </div>
+          </div>
+          );
+      }
+    
+      // ডাটা পেলে না থাকলেই এটি স্ট্যাটিক ডাটা দেখাবে
+      if (!strengths) return null;
   return (
     <section className="py-20  relative overflow-hidden">
       {/* পেছনের সাবটল গ্র্যাডিয়েন্ট আভা */}

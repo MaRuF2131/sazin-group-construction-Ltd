@@ -79,7 +79,6 @@ export const products = [
     name: 'Gate Valve',
     slug: 'gate-valve',
     category: 'gate-valve',
-    emoji: '🚪',
     shortDesc: 'Long / Short Stem gate valve for underground distribution networks',
     description:
       'SAZIN Gate Valves feature a fully EPDM encapsulated wedge for superior sealing. Designed for municipal water supply, underground distribution networks, water treatment plants, and pumping stations. Available in Long Stem and Short Stem variants with Flanged or Grooved connections.',
